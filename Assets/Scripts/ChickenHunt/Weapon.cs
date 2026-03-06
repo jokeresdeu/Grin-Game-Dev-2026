@@ -88,11 +88,6 @@ namespace ChickenHunt
         {
             if (_isReloading || _currentAmmo <= 0) return;
 
-            Shoot();
-        }
-
-        private void Shoot()
-        {
             _currentAmmo--;
             UpdateAmmoUI();
 
@@ -115,7 +110,7 @@ namespace ChickenHunt
                 StartReload();
             }
         }
-
+        
         private void TryReload()
         {
             if (_isReloading || _currentAmmo == _maxAmmo) return;

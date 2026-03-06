@@ -5,7 +5,7 @@ namespace ChickenHunt
     public class SpawnPoint : MonoBehaviour
     {
         [Header("Chickens")]
-        [SerializeField] private GameObject[] _chickenPrefabs;
+        [SerializeField] private Chicken[] _chickenPrefabs;
 
         [Header("Spawn Direction")]
         [SerializeField] private Vector2 _flyDirection = Vector2.left;
@@ -16,12 +16,11 @@ namespace ChickenHunt
                 return null;
 
             int index = Random.Range(0, _chickenPrefabs.Length);
-            GameObject prefab = _chickenPrefabs[index];
+            Chicken prefab = _chickenPrefabs[index];
 
             if (prefab == null) return null;
 
-            GameObject chickenObj = Instantiate(prefab, transform.position, Quaternion.identity);
-            Chicken chicken = chickenObj.GetComponent<Chicken>();
+            Chicken chicken = Instantiate(prefab, transform.position, Quaternion.identity);
 
             if (chicken != null)
             {
