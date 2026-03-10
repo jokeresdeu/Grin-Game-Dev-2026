@@ -9,7 +9,7 @@ namespace UkraineVsZombies
         [Header("Grid Settings")]
         [SerializeField] private int _width = 9;
         [SerializeField] private int _height = 5;
-        [SerializeField] private float _cellSize = 1f;
+        [SerializeField] private Vector2 _cellSize = new Vector2(1f, 1f);
         [SerializeField] private Vector2 _offset = new Vector2(-4f, -2f);
 
         [Header("Tower")]
@@ -74,15 +74,15 @@ namespace UkraineVsZombies
         private Vector2Int GetCell()
         {
             Vector3 mouse = _camera.ScreenToWorldPoint(Input.mousePosition);
-            int x = Mathf.FloorToInt((mouse.x - _offset.x) / _cellSize);
-            int y = Mathf.FloorToInt((mouse.y - _offset.y) / _cellSize);
+            int x = Mathf.FloorToInt((mouse.x - _offset.x) / _cellSize.x);
+            int y = Mathf.FloorToInt((mouse.y - _offset.y) / _cellSize.y);
             return new Vector2Int(x, y);
         }
 
         private Vector3 GetWorldPosition(Vector2Int cell)
         {
-            float x = cell.x * _cellSize + _offset.x + _cellSize / 2f;
-            float y = cell.y * _cellSize + _offset.y + _cellSize / 2f;
+            float x = cell.x * _cellSize.x + _offset.x + _cellSize.x / 2f;
+            float y = cell.y * _cellSize.y + _offset.y + _cellSize.y / 2f;
             return new Vector3(x, y, 0f);
         }
 
@@ -102,16 +102,23 @@ namespace UkraineVsZombies
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.cyan;
+
+            float gridWidth = _width * _cellSize.x;
+            float gridHeight = _height * _cellSize.y;
+
             for (int x = 0; x <= _width; x++)
             {
-                Vector3 start = new Vector3(x * _cellSize + _offset.x, _offset.y, 0f);
-                Vector3 end = new Vector3(x * _cellSize + _offset.x, _height * _cellSize + _offset.y, 0f);
+                float xPos = x * _cellSize.x + _offset.x;
+                Vector3 start = new Vector3(xPos, _offset.y, 0f);
+                Vector3 end = new Vector3(xPos, _offset.y + gridHeight, 0f);
                 Gizmos.DrawLine(start, end);
             }
+
             for (int y = 0; y <= _height; y++)
             {
-                Vector3 start = new Vector3(_offset.x, y * _cellSize + _offset.y, 0f);
-                Vector3 end = new Vector3(_width * _cellSize + _offset.x, y * _cellSize + _offset.y, 0f);
+                float yPos = y * _cellSize.y + _offset.y;
+                Vector3 start = new Vector3(_offset.x, yPos, 0f);
+                Vector3 end = new Vector3(_offset.x + gridWidth, yPos, 0f);
                 Gizmos.DrawLine(start, end);
             }
         }

@@ -17,7 +17,7 @@ namespace RPG
         [SerializeField] private LayerMask _npcLayer;
 
         [Header("Visual")]
-        [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private Transform _playerTransform;
 
         private Camera _camera;
         private Vector2 _moveInput;
@@ -131,8 +131,8 @@ namespace RPG
         {
             transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
 
-            if (_spriteRenderer != null && direction.x != 0)
-                _spriteRenderer.flipX = direction.x < 0;
+            if (direction.x != 0)
+               transform.Rotate(0, 180, 0);
         }
 
         private bool CanMove(Vector2 direction)
