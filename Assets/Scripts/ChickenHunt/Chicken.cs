@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace ChickenHunt
 {
-    public class Chicken : MonoBehaviour
+    public class Chicken : MonoBehaviour, IShootable
     {
         [Header("Points")]
         [SerializeField] private int _points = 100;
@@ -44,8 +44,7 @@ namespace ChickenHunt
         {
             transform.Translate(_moveDirection * _speed * Time.deltaTime);
         }
-
-        public void Die()
+        public void OnShoot()
         {
             OnDeath?.Invoke(_points);
             Destroy(gameObject);

@@ -96,13 +96,9 @@ namespace ChickenHunt
 
             RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero);
 
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.TryGetComponent(out IShootable target))
             {
-                var chicken = hit.collider.GetComponent<Chicken>();
-                if (chicken != null)
-                {
-                    chicken.Die();
-                }
+                target.OnShoot();
             }
 
             if (_currentAmmo <= 0)
