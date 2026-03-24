@@ -98,7 +98,7 @@ namespace ChickenHunt
 
             if (hit.collider != null && hit.collider.TryGetComponent(out IShootable target))
             {
-                target.OnShoot();
+                target.OnShoot(1);
             }
 
             if (_currentAmmo <= 0)
