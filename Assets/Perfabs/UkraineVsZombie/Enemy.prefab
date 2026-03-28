@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81509755f842422395c8fcef6ef2ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UkraineVsZombies.Enemy
-  _maxHealth: 50
-  _moveSpeed: 2
+  _maxHealth: 200
+  _moveSpeed: 0.8
   _attackDamage: 10
   _attackRate: 1
   _hpSlider: {fileID: 3502935079855447380}

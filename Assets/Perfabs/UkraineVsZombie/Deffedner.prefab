@@ -110,6 +110,9 @@ MonoBehaviour:
   _damage: 10
   _projectilePrefab: {fileID: 0}
   _firePoint: {fileID: 0}
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
   _hpSlider: {fileID: 0}
 --- !u!1 &808660389692856845
 GameObject:
@@ -161,10 +164,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UkraineVsZombies.Tower
   _maxHealth: 100
   _range: 500
-  _fireRate: 1
-  _damage: 10
+  _fireRate: 1.2
+  _damage: 15
   _projectilePrefab: {fileID: 5822590633788387623, guid: 1e7ed0f6d05e744179b7d94049a20452, type: 3}
   _firePoint: {fileID: 5019930916405196299}
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
   _hpSlider: {fileID: 4065791497984751412}
 --- !u!61 &3222392971436248982
 BoxCollider2D:

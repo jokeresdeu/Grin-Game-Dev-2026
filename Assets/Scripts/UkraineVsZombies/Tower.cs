@@ -15,6 +15,7 @@ namespace UkraineVsZombies
         [Header("Projectile")]
         [SerializeField] private GameObject _projectilePrefab;
         [SerializeField] private Transform _firePoint;
+        [SerializeField] private LayerMask _enemyLayer;
 
         [Header("HP Bar")]
         [SerializeField] private Slider _hpSlider;
@@ -49,10 +50,20 @@ namespace UkraineVsZombies
         {
             _fireTimer -= Time.deltaTime;
 
-            if (_target == null || !_target.IsAlive || _fireTimer > 0f) return;
+            if (_fireTimer > 0f) return;
 
-            Fire();
-            _fireTimer = 1f / _fireRate;
+            RaycastHit2D hit = Physics2D.Raycast(_firePoint.position, Vector2.right, _range, _enemyLayer);
+
+            if (hit.collider != null)
+            {
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                if (enemy != null && enemy.IsAlive)
+                {
+                    _target = enemy;
+                    Fire();
+                    _fireTimer = 1f / _fireRate;
+                }
+            }
         }
 
         private void Fire()

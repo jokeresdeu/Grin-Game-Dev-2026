@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace UkraineVsZombies
 {
@@ -23,11 +24,19 @@ namespace UkraineVsZombies
         private float _cooldownTimer;
         private readonly HashSet<Vector2Int> _occupiedCells = new();
 
+        private bool _isTowerSelected = false;
+
         public bool CanSpawn => _cooldownTimer <= 0f;
 
         private void Awake()
         {
             _camera = Camera.main;
+        }
+
+        private void Start()
+        {
+            _cooldownTimer = 0f;
+            UpdateCooldownUI();
         }
 
         private void Update()
@@ -45,14 +54,25 @@ namespace UkraineVsZombies
             }
         }
 
+        public void SelectTower()
+        {
+            if (CanSpawn)
+            {
+                _isTowerSelected = true;
+            }
+        }
+
         private void HandleInput()
         {
-            if (!Input.GetMouseButtonDown(0)) return;
-            if (!CanSpawn) return;
+            if (!Input.GetMouseButtonDown(0) || !_isTowerSelected) return;
+
+            if (EventSystem.current.IsPointerOverGameObject()) return;
 
             Vector2Int cell = GetCell();
             if (IsValidCell(cell))
+            {
                 PlaceTower(cell);
+            }
         }
 
         private void PlaceTower(Vector2Int cell)
@@ -67,7 +87,9 @@ namespace UkraineVsZombies
                 GameManager.Instance.RegisterTower(tower, cell.y);
 
             _occupiedCells.Add(cell);
+
             _cooldownTimer = _spawnCooldown;
+            _isTowerSelected = false;
             UpdateCooldownUI();
         }
 
