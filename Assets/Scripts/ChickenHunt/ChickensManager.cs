@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace ChickenHunt
 {
     public class ChickensManager : MonoBehaviour
     {
+        public static ChickensManager Instance { get; private set; }
+
         [Header("Spawn Points")]
         [SerializeField] private SpawnPoint[] _spawnPoints;
 
@@ -17,16 +20,32 @@ namespace ChickenHunt
         [Header("Bounds")]
         [SerializeField] private float _killDistance = 15f;
 
-        [Header("UI")]
+        [Header("UI & Game State")]
         [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _hpText;
+        [SerializeField] private GameObject _gameOverPanel;
+        [SerializeField] private int _maxHP = 5;
 
         private readonly List<Chicken> _activeChickens = new();
         private float _spawnTimer;
         private int _score;
         private bool _isSpawning;
+        private int _currentHP;
+
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
 
         private void Start()
         {
+            _currentHP = _maxHP;
+            UpdateHPUI();
+
+            if (_gameOverPanel != null) _gameOverPanel.SetActive(false);
+            Time.timeScale = 1f;
+
             StartSpawning();
         }
 
@@ -36,6 +55,37 @@ namespace ChickenHunt
 
             UpdateSpawning();
             CheckOutOfBounds();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (!_isSpawning) return;
+
+            _currentHP -= damage;
+            UpdateHPUI();
+
+            if (_currentHP <= 0)
+            {
+                GameOver();
+            }
+        }
+
+        private void GameOver()
+        {
+            StopSpawning();
+            if (_gameOverPanel != null) _gameOverPanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
+        public void RestartGame()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private void UpdateHPUI()
+        {
+            if (_hpText != null) _hpText.text = $"HP: {_currentHP}";
         }
 
         private void UpdateSpawning()
@@ -85,13 +135,13 @@ namespace ChickenHunt
 
         private void SpawnChicken()
         {
-            if (_spawnPoints == null || _spawnPoints.Length == 0) 
+            if (_spawnPoints == null || _spawnPoints.Length == 0)
                 return;
 
             int pointIndex = Random.Range(0, _spawnPoints.Length);
             SpawnPoint spawnPoint = _spawnPoints[pointIndex];
 
-            if (spawnPoint == null) 
+            if (spawnPoint == null)
                 return;
 
             Chicken chicken = spawnPoint.Spawn();
