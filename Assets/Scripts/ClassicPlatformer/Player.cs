@@ -10,6 +10,7 @@ namespace ClassicPlatformer
         [SerializeField] private float _moveSpeed = 7f;
         [SerializeField] private float _climbSpeed = 3.5f;
         [SerializeField] private float _jumpForce = 14f;
+        [SerializeField] private PlayerView _playerView;
 
         [Header("Ground Detection")]
         [SerializeField] private Transform _groundCheck;
@@ -24,9 +25,6 @@ namespace ClassicPlatformer
 
         [Header("Invincibility")]
         [SerializeField] private float _invincibilityDuration = 1.5f;
-
-        [Header("UI")]
-        [SerializeField] private TextMeshProUGUI _healthText;
 
         private int _currentHealth;
         private float _invincibilityTimer;
@@ -45,7 +43,8 @@ namespace ClassicPlatformer
         {
             _currentHealth = _maxHealth;
             _rb = GetComponent<Rigidbody2D>();
-            UpdateUI();
+            _playerView.SetPlayer("SuperHero", "1");
+            SetHp();
         }
 
         private void Update()
@@ -59,6 +58,11 @@ namespace ClassicPlatformer
             {
                 Jump();
             }
+            
+            if(Input.GetKeyDown(KeyCode.C))
+                TakeDamage(1);
+            if(Input.GetKeyDown(KeyCode.H))
+                Heal(1);
 
             if (_isInvincible)
             {
@@ -97,15 +101,13 @@ namespace ClassicPlatformer
             }
         }
         
-       
-
         public void TakeDamage(int damage = 1)
         {
             if (_isInvincible || _currentHealth <= 0) return;
 
             _currentHealth -= damage;
             _currentHealth = Mathf.Max(_currentHealth, 0);
-            UpdateUI();
+            SetHp();
 
             if (_currentHealth <= 0)
             {
@@ -124,13 +126,9 @@ namespace ClassicPlatformer
 
             _currentHealth += amount;
             _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
-            UpdateUI();
+            SetHp();
         }
-
-        private void UpdateUI()
-        {
-            if (_healthText != null)
-                _healthText.text = $"HP: {_currentHealth}/{_maxHealth}";
-        }
+        
+        private void SetHp() =>  _playerView.UpdateHp((float)_currentHealth/_maxHealth);
     }
 }
