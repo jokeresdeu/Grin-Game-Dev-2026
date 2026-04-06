@@ -7,10 +7,27 @@ namespace ChickenHunt
         [Header("Explosion Settings")]
         [SerializeField] private float _explosionRadius = 3f;
 
+        private Animator _animator;
+        private bool _isDead = false;
+
+        private void Start()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
         public void OnShoot()
         {
+            if (_isDead) return;
+            _isDead = true;
+
             Explode();
-            Destroy(gameObject);
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("DoExplode");
+            }
+
+            Destroy(gameObject, 0.3f);
         }
 
         private void Explode()

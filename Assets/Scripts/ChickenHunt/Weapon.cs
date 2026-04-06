@@ -23,6 +23,8 @@ namespace ChickenHunt
         private bool _isReloading;
         private Vector3 _velocity;
 
+        private Animator _animator;
+
         private void Awake()
         {
             _camera = Camera.main;
@@ -31,6 +33,8 @@ namespace ChickenHunt
 
         private void Start()
         {
+            _animator = GetComponent<Animator>();
+
             UpdateAmmoUI();
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(false);
@@ -91,6 +95,11 @@ namespace ChickenHunt
             _currentAmmo--;
             UpdateAmmoUI();
 
+            if (_animator != null)
+            {
+                _animator.Play("Crosshair_Shoot");
+            }
+
             Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorld.z = 0f;
 
@@ -106,7 +115,7 @@ namespace ChickenHunt
                 StartReload();
             }
         }
-        
+
         private void TryReload()
         {
             if (_isReloading || _currentAmmo == _maxAmmo) return;
@@ -118,7 +127,7 @@ namespace ChickenHunt
         {
             _isReloading = true;
             _reloadTimer = _reloadTime;
-            
+
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(true);
         }
@@ -128,7 +137,7 @@ namespace ChickenHunt
             _isReloading = false;
             _currentAmmo = _maxAmmo;
             UpdateAmmoUI();
-            
+
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(false);
         }

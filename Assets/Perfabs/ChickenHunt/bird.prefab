@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3682342980579235901}
   - component: {fileID: 3805136640975867360}
   - component: {fileID: 4046146028555243889}
+  - component: {fileID: 5137150035945767336}
   m_Layer: 0
   m_Name: bird
   m_TagString: Untagged
@@ -115,6 +116,28 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &5137150035945767336
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6872627813856974901}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 54f4d7478e8b0a7458070eb2b58bac90, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5934788596110416493
 PrefabInstance:
   m_ObjectHideFlags: 0
