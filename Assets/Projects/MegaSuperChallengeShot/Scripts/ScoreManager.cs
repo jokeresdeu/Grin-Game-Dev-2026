@@ -1,36 +1,35 @@
-using System;
-using TMPro;
 using UnityEngine;
+using TMPro; 
 
-namespace Projects.MegaSuperChallengeShot.Scripts
+public class ScoreManager : MonoBehaviour
 {
-    public class ScoreManager : MonoBehaviour
+    public int score = 0;
+    public int targetScore = 5; 
+    public TextMeshProUGUI scoreText;
+
+    public GameObject winMenuUI; 
+
+    public void AddScore()
     {
-        [SerializeField] private TMP_Text _scoreText;
-        public static ScoreManager Instance { get; private set; }
+        score++;
+        UpdateUI();
 
-        private int _score;
+        if (score >= targetScore)
+        {
+            WinGame();
+        }
+    }
 
-        private void Start()
-        {
-            _scoreText.text = $"Score: {0}";
-        }
-        
-        private void Awake()
-        {
-            if(Instance != null)
-                Destroy(gameObject);
-            else
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-        }
+    void UpdateUI()
+    {
+        scoreText.text = "Score: " + score;
+    }
 
-        public void AddScore()
-        {
-            _score++;
-            _scoreText.text = $"Score: {_score}";
-        }
+    void WinGame()
+    {
+        winMenuUI.SetActive(true);
+        Time.timeScale = 0f;     
+        Cursor.visible = true;    
+        Cursor.lockState = CursorLockMode.None;
     }
 }

@@ -13,11 +13,13 @@ public class InteractionManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI shotsText;
+    public GameObject winMenuUI; 
 
     void Start()
     {
         shotsCurrent = shotsMax;
         Cursor.visible = false;
+        Time.timeScale = 1f;
         UpdateUI();
         SpawnNewBird();
     }
@@ -58,12 +60,30 @@ public class InteractionManager : MonoBehaviour
 
                 score++;
 
+                if (score >= 5)
+                {
+                    WinGame();
+                }
+
                 Destroy(bird, 0.2f);
 
-                SpawnNewBird();
+                if (score < 5)
+                {
+                    SpawnNewBird();
+                }
             }
         }
         UpdateUI();
+    }
+
+    void WinGame()
+    {
+        if (winMenuUI != null)
+        {
+            winMenuUI.SetActive(true); 
+            Time.timeScale = 0f;     
+            Cursor.visible = true;     
+        }
     }
 
     void SpawnNewBird()
