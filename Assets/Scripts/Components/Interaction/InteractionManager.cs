@@ -1,32 +1,35 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class InteractionManager : MonoBehaviour
 {
-    [Header("Налаштування гри")]
-    public int score = 0;
-    public float hp = 100f;
-
-    [Header("Зв'язок з інтерфейсом (UI)")]
-    public TextMeshProUGUI scoreText;
-    public Slider healthSlider;
-
-    [Header("Налаштування спауну (Рандом)")]
+    [Header("Settings")]
     public GameObject birdPrefab;
-    public float minX = -7f;
-    public float maxX = 7f;
-    public float minY = -3f;
-    public float maxY = 4f;
+    public GameObject crosshair;
+    public int score = 0;
+    public int shotsMax = 5;
+    private int shotsCurrent;
+
+    [Header("UI")]
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI shotsText;
 
     void Start()
     {
+        shotsCurrent = shotsMax;
+        Cursor.visible = false;
         UpdateUI();
+        SpawnNewBird();
     }
 
     void Update()
     {
+        if (crosshair != null)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
+            crosshair.transform.position = mousePos;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Shoot();
@@ -35,52 +38,46 @@ public class InteractionManager : MonoBehaviour
 
     void Shoot()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-
-        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
-        if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+        if (shotsCurrent > 0)
         {
-            Debug.Log("ВЛУЧАННЯ! Вбито: " + hit.collider.gameObject.name);
+            shotsCurrent--;
 
-            Destroy(hit.collider.gameObject); 
-            score += 1;                     
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
+            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+            Collider2D hit = Physics2D.OverlapPoint(mousePos2D);
 
-            SpawnNewBird();                  
+            if (hit != null && hit.CompareTag("Enemy"))
+            {
+                GameObject bird = hit.gameObject;
+
+                Animator anim = bird.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetTrigger("Die");
+                }
+
+                score++;
+
+                Destroy(bird, 0.2f);
+
+                SpawnNewBird();
+            }
         }
-        else
-        {
-            Debug.Log("ПРОМАХ!");
-            hp -= 10f;                       
-        }
-
-        UpdateUI(); 
+        UpdateUI();
     }
 
     void SpawnNewBird()
     {
         if (birdPrefab != null)
         {
-            float randomX = Random.Range(minX, maxX);
-            float randomY = Random.Range(minY, maxY);
-            Vector3 randomPos = new Vector3(randomX, randomY, 0);
-
+            Vector3 randomPos = new Vector3(Random.Range(-7f, 7f), Random.Range(-3f, 3f), 0);
             Instantiate(birdPrefab, randomPos, Quaternion.identity);
-
-            Debug.Log("НОВА ПТАШКА з'явилася в: " + randomPos);
         }
     }
 
     void UpdateUI()
     {
         if (scoreText != null) scoreText.text = "Score: " + score;
-        if (healthSlider != null) healthSlider.value = hp;
-
-        if (hp <= 0)
-        {
-            Debug.Log("КІНЕЦЬ ГРИ! Перезапуск...");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        if (shotsText != null) shotsText.text = shotsCurrent + "/" + shotsMax;
     }
 }
