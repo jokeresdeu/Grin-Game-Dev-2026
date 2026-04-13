@@ -18,13 +18,25 @@ namespace UkraineVsZombies
         private float _currentHealth;
         private float _attackTimer;
         private Tower _targetTower;
+        private Animator _animator;
+        private bool _isDead;
 
         public event Action OnDeath;
-        public bool IsAlive => _currentHealth > 0;
+        public bool IsAlive => !_isDead && _currentHealth > 0;
+
+        private void Awake()
+        {
+            _currentHealth = _maxHealth;
+            _animator = GetComponent<Animator>();
+            UpdateHPBar();
+        }
 
         public void Initialize()
         {
             _currentHealth = _maxHealth;
+            _isDead = false;
+            _targetTower = null;
+            _attackTimer = 0f;
             UpdateHPBar();
         }
 
@@ -33,9 +45,19 @@ namespace UkraineVsZombies
             if (!IsAlive) return;
 
             if (_targetTower != null && _targetTower.IsAlive)
+            {
+                if (_animator != null)
+                    _animator.SetBool("isMoving", false);
+
                 Attack();
+            }
             else
+            {
+                if (_animator != null)
+                    _animator.SetBool("isMoving", true);
+
                 Move();
+            }
         }
 
         private void Move()
@@ -52,6 +74,7 @@ namespace UkraineVsZombies
         private void Attack()
         {
             _attackTimer -= Time.deltaTime;
+
             if (_attackTimer <= 0f)
             {
                 _targetTower.TakeDamage(_attackDamage);
@@ -66,10 +89,18 @@ namespace UkraineVsZombies
             _currentHealth -= damage;
             UpdateHPBar();
 
+            if (_animator != null)
+                _animator.SetTrigger("Hurt");
+
             if (_currentHealth <= 0f)
             {
+                _isDead = true;
+
+                if (_animator != null)
+                    _animator.SetTrigger("Die");
+
                 OnDeath?.Invoke();
-                Destroy(gameObject);
+                Destroy(gameObject, 0.4f);
             }
         }
 

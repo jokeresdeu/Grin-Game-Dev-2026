@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8832538928693802735}
   - component: {fileID: 7126998753875121321}
   - component: {fileID: 5640824217297162645}
+  - component: {fileID: 1739352180460344566}
   m_Layer: 0
   m_Name: Graph
   m_TagString: Untagged
@@ -111,6 +112,28 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 0}
   _firePoint: {fileID: 0}
   _hpSlider: {fileID: 0}
+--- !u!95 &1739352180460344566
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123795426998999645}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa8795957de057442bf13d9c1957bb82, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &808660389692856845
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +146,7 @@ GameObject:
   - component: {fileID: 8475636331228753114}
   - component: {fileID: 3222392971436248982}
   - component: {fileID: 6819986154805606957}
+  - component: {fileID: 2132253321858005937}
   m_Layer: 0
   m_Name: Deffedner
   m_TagString: Untagged
@@ -226,6 +250,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenderHealth
   hp: 50
+--- !u!95 &2132253321858005937
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808660389692856845}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1a98bd20978cb4d46b171654a56d1bfe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5406994896740908844
 GameObject:
   m_ObjectHideFlags: 0

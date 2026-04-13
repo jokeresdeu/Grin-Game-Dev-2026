@@ -22,7 +22,10 @@ namespace UkraineVsZombies
         private float _currentHealth;
         private float _fireTimer;
         private Enemy _target;
-        public bool IsAlive => _currentHealth > 0;
+        private DefenderAnimation _defenderAnimation;
+        private bool _isDead;
+
+        public bool IsAlive => !_isDead && _currentHealth > 0;
         public float Range => _range;
 
         private void Awake()
@@ -31,12 +34,19 @@ namespace UkraineVsZombies
                 _firePoint = transform;
 
             _currentHealth = _maxHealth;
+            _defenderAnimation = GetComponent<DefenderAnimation>();
             UpdateHpBar();
         }
 
         private void Update()
         {
             if (!IsAlive) return;
+
+            bool canAttack = _target != null && _target.IsAlive;
+
+            if (_defenderAnimation != null)
+                _defenderAnimation.SetAttacking(canAttack);
+
             TryFire();
         }
 
@@ -49,7 +59,8 @@ namespace UkraineVsZombies
         {
             _fireTimer -= Time.deltaTime;
 
-            if (_target == null || !_target.IsAlive || _fireTimer > 0f) return;
+            if (_target == null || !_target.IsAlive || _fireTimer > 0f)
+                return;
 
             Fire();
             _fireTimer = 1f / _fireRate;
@@ -79,7 +90,12 @@ namespace UkraineVsZombies
 
             if (_currentHealth <= 0f)
             {
-                Destroy(gameObject);
+                _isDead = true;
+
+                if (_defenderAnimation != null)
+                    _defenderAnimation.PlayDeath();
+
+                Destroy(gameObject, 0.4f);
             }
         }
 

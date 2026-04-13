@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace UkraineVsZombies
 {
@@ -10,6 +11,14 @@ namespace UkraineVsZombies
         private Enemy _target;
         private float _damage;
         private float _timer;
+        private bool _isHit;
+
+        private BulletAnimation _bulletAnimation;
+
+        private void Awake()
+        {
+            _bulletAnimation = GetComponent<BulletAnimation>();
+        }
 
         public void Initialize(Enemy target, float damage)
         {
@@ -20,6 +29,8 @@ namespace UkraineVsZombies
 
         private void Update()
         {
+            if (_isHit) return;
+
             _timer -= Time.deltaTime;
             if (_timer <= 0f)
             {
@@ -42,12 +53,26 @@ namespace UkraineVsZombies
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (_isHit) return;
+
             var enemy = other.GetComponent<Enemy>();
             if (enemy != null && enemy == _target)
             {
                 enemy.TakeDamage(_damage);
-                Destroy(gameObject);
+                StartCoroutine(ImpactRoutine());
             }
+        }
+
+        private IEnumerator ImpactRoutine()
+        {
+            _isHit = true;
+
+            if (_bulletAnimation != null)
+                _bulletAnimation.PlayImpact();
+
+            yield return new WaitForSeconds(0.1f);
+
+            Destroy(gameObject);
         }
     }
 }
