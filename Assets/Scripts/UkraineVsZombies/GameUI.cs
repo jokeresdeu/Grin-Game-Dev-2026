@@ -6,11 +6,18 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
 
+    [Header("Stats")]
     public int score = 0;
     public int baseHP = 5;
 
+    [Header("UI Text")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hpText;
+    public TextMeshProUGUI waveText;
+    public TextMeshProUGUI enemiesText;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject losePanel;
 
     private void Awake()
     {
@@ -21,6 +28,13 @@ public class GameUI : MonoBehaviour
     {
         UpdateScoreUI();
         UpdateHPUI();
+        UpdateWaveUI(1);
+        UpdateEnemiesUI(0);
+
+        if (losePanel != null)
+            losePanel.SetActive(false);
+
+        Time.timeScale = 1f;
     }
 
     public void AddScore(int value)
@@ -40,8 +54,20 @@ public class GameUI : MonoBehaviour
 
         if (baseHP <= 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ShowGameOver();
         }
+    }
+
+    public void UpdateWaveUI(int wave)
+    {
+        if (waveText != null)
+            waveText.text = "Wave: " + wave;
+    }
+
+    public void UpdateEnemiesUI(int count)
+    {
+        if (enemiesText != null)
+            enemiesText.text = "Enemies: " + count;
     }
 
     private void UpdateScoreUI()
@@ -54,5 +80,25 @@ public class GameUI : MonoBehaviour
     {
         if (hpText != null)
             hpText.text = "HP: " + baseHP;
+    }
+
+    private void ShowGameOver()
+    {
+        if (losePanel != null)
+            losePanel.SetActive(true);
+
+        Time.timeScale = 0f;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GoToMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 }

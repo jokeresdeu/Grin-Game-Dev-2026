@@ -34,6 +34,7 @@ namespace UkraineVsZombies
                 _firePoint = transform;
 
             _currentHealth = _maxHealth;
+            _fireTimer = 0f;
             _defenderAnimation = GetComponent<DefenderAnimation>();
             UpdateHpBar();
         }
@@ -41,6 +42,11 @@ namespace UkraineVsZombies
         private void Update()
         {
             if (!IsAlive) return;
+
+            if (_target == null || !_target.IsAlive || !IsTargetInRange(_target))
+            {
+                FindTarget();
+            }
 
             bool canAttack = _target != null && _target.IsAlive;
 
@@ -70,8 +76,9 @@ namespace UkraineVsZombies
         {
             if (_projectilePrefab != null)
             {
-                var obj = Instantiate(_projectilePrefab, _firePoint.position, Quaternion.identity);
-                var projectile = obj.GetComponent<Projectile>();
+                GameObject obj = Instantiate(_projectilePrefab, _firePoint.position, Quaternion.identity);
+                Projectile projectile = obj.GetComponent<Projectile>();
+
                 if (projectile != null)
                     projectile.Initialize(_target, _damage);
             }
@@ -79,6 +86,38 @@ namespace UkraineVsZombies
             {
                 _target.TakeDamage(_damage);
             }
+        }
+
+        private void FindTarget()
+        {
+            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+            float closestDistance = Mathf.Infinity;
+            Enemy closestEnemy = null;
+
+            foreach (Enemy enemy in enemies)
+            {
+                if (enemy == null || !enemy.IsAlive)
+                    continue;
+
+                float distance = Vector2.Distance(transform.position, enemy.transform.position);
+
+                if (distance <= _range && distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestEnemy = enemy;
+                }
+            }
+
+            _target = closestEnemy;
+        }
+
+        private bool IsTargetInRange(Enemy enemy)
+        {
+            if (enemy == null) return false;
+
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            return distance <= _range;
         }
 
         public void TakeDamage(float damage)
@@ -108,7 +147,7 @@ namespace UkraineVsZombies
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.right * _range);
+            Gizmos.DrawWireSphere(transform.position, _range);
         }
     }
 }
