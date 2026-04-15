@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace ClassicPlatformer
 {
+    [RequireComponent(typeof(Animator), typeof(Collider2D))]
     public class Enemy : MonoBehaviour
     {
         [Header("Patrol")]
@@ -9,13 +10,26 @@ namespace ClassicPlatformer
         [SerializeField] private Transform _leftPoint;
         [SerializeField] private Transform _rightPoint;
 
-        [Header("Damage")]
+        [Header("Damage & Health")]
         [SerializeField] private int _damage = 1;
+        [SerializeField] private int _health = 2;
+        [SerializeField] private float _deathAnimationTime = 0.5f;
 
         private int _direction = 1;
+        private Animator _animator;
+        private Collider2D _collider;
+        private bool _isDead = false;
+
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+            _collider = GetComponent<Collider2D>();
+        }
 
         private void Update()
         {
+            if (_isDead) return;
+
             Patrol();
             CheckPatrolBounds();
         }
@@ -41,13 +55,50 @@ namespace ClassicPlatformer
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (_isDead) return;
+
             var player = other.GetComponentInParent<Player>();
 
             if (player != null)
             {
+                player.PlayAttackAnimation();
+
                 player.TakeDamage(_damage);
-                Debug.Log("Слиз вкусив гравця!");
+                Debug.Log("Зіткнення! Гравець б'є і отримує шкоду одночасно.");
+
+                TakeDamage();
             }
+        }
+
+        private void TakeDamage()
+        {
+            _health--;
+            Debug.Log("Ворога вдарили! У нього залишилось HP: " + _health);
+
+            if (_health <= 0)
+            {
+                Die();
+            }
+            else
+            {
+                if (_animator != null)
+                {
+                    _animator.SetTrigger("Hit");
+                }
+            }
+        }
+
+        private void Die()
+        {
+            _isDead = true;
+            _collider.enabled = false;
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Die");
+            }
+
+            Destroy(gameObject, _deathAnimationTime);
         }
 
         private void OnDrawGizmosSelected()

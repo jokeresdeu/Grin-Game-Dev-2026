@@ -1,10 +1,10 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement; // ДОДАНО: Бібліотека для перезавантаження сцени
+using UnityEngine.SceneManagement;
 
 namespace ClassicPlatformer
 {
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
     public class Player : MonoBehaviour
     {
         [Header("Movement")]
@@ -37,6 +37,7 @@ namespace ClassicPlatformer
         public int MaxHealth => _maxHealth;
 
         private Rigidbody2D _rb;
+        private Animator _animator;
         private float _horizontalInput;
         private float _verticalMovement;
         private bool _isGrounded;
@@ -46,6 +47,7 @@ namespace ClassicPlatformer
         {
             _currentHealth = _maxHealth;
             _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
             UpdateUI();
         }
 
@@ -55,6 +57,12 @@ namespace ClassicPlatformer
             _verticalMovement = Input.GetAxisRaw("Vertical");
 
             _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+
+            if (_animator != null)
+            {
+                _animator.SetFloat("Speed", Mathf.Abs(_horizontalInput));
+                _animator.SetBool("IsGrounded", _isGrounded);
+            }
 
             if (Input.GetButtonDown("Jump") && _isGrounded)
             {
@@ -98,6 +106,14 @@ namespace ClassicPlatformer
             }
         }
 
+        public void PlayAttackAnimation()
+        {
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Attack");
+            }
+        }
+
         public void TakeDamage(int damage = 1)
         {
             if (_isInvincible || _currentHealth <= 0) return;
@@ -112,6 +128,11 @@ namespace ClassicPlatformer
             }
             else
             {
+                if (_animator != null)
+                {
+                    _animator.SetTrigger("Hit");
+                }
+
                 _isInvincible = true;
                 _invincibilityTimer = _invincibilityDuration;
             }
