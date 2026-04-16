@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
  
 namespace ClassicPlatformer
 {
@@ -20,11 +21,17 @@ namespace ClassicPlatformer
         [Header("Visual")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
  
+        [Header("Animation")]
+        [SerializeField] private Animator _animator;
+ 
         [Header("Health")]
         [SerializeField] private int _maxHealth = 3;
  
         [Header("Invincibility")]
         [SerializeField] private float _invincibilityDuration = 1.5f;
+ 
+        [Header("Death")]
+        [SerializeField] private float _deathDelay = 1f; 
  
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _healthText;
@@ -32,6 +39,7 @@ namespace ClassicPlatformer
         private int _currentHealth;
         private float _invincibilityTimer;
         private bool _isInvincible;
+        private bool _isDead = false;
  
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
@@ -49,11 +57,17 @@ namespace ClassicPlatformer
         {
             _currentHealth = _maxHealth;
             _rb = GetComponent<Rigidbody2D>();
+ 
+            if (_animator == null)
+                _animator = GetComponent<Animator>();
+ 
             UpdateUI();
         }
  
         private void Update()
         {
+            if (_isDead) return;
+ 
             _horizontalInput = Input.GetAxisRaw("Horizontal");
             _verticalMovement = Input.GetAxisRaw("Vertical");
  
@@ -63,10 +77,13 @@ namespace ClassicPlatformer
                 Jump();
  
             HandleInvincibility();
+            UpdateAnimator();
         }
  
         private void FixedUpdate()
         {
+            if (_isDead) return;
+ 
             float velocityY = _verticalMovementEnabled
                 ? _verticalMovement * _climbSpeed
                 : _rb.linearVelocity.y;
@@ -75,6 +92,14 @@ namespace ClassicPlatformer
  
             if (_spriteRenderer != null && _horizontalInput != 0)
                 _spriteRenderer.flipX = _horizontalInput < 0;
+        }
+ 
+        private void UpdateAnimator()
+        {
+            if (_animator == null) return;
+ 
+            _animator.SetFloat("Speed", Mathf.Abs(_horizontalInput));
+            _animator.SetBool("IsGrounded", _isGrounded);
         }
  
         public void EnableVerticalMovement(bool enabled)
@@ -87,7 +112,7 @@ namespace ClassicPlatformer
         {
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpForce);
         }
-
+ 
         private void HandleInvincibility()
         {
             if (!_isInvincible) return;
@@ -106,13 +131,13 @@ namespace ClassicPlatformer
             {
                 _isInvincible = false;
                 if (_spriteRenderer != null)
-                    _spriteRenderer.enabled = true; 
+                    _spriteRenderer.enabled = true;
             }
         }
  
         public void TakeDamage(int damage = 1)
         {
-            if (_isInvincible || _currentHealth <= 0) return;
+            if (_isInvincible || _currentHealth <= 0 || _isDead) return;
  
             _currentHealth -= damage;
             _currentHealth = Mathf.Max(_currentHealth, 0);
@@ -138,10 +163,23 @@ namespace ClassicPlatformer
             _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
             UpdateUI();
         }
-
+ 
         private void Die()
         {
-            Debug.Log("Player died! Restarting...");
+            _isDead = true;
+
+            _rb.linearVelocity = Vector2.zero;
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+
+            if (_animator != null)
+                _animator.SetTrigger("Death");
+ 
+            StartCoroutine(RestartAfterDeath());
+        }
+ 
+        private IEnumerator RestartAfterDeath()
+        {
+            yield return new WaitForSeconds(_deathDelay);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
  

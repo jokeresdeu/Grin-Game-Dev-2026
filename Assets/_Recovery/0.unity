@@ -2513,10 +2513,9 @@ GameObject:
   - component: {fileID: 1160114670}
   - component: {fileID: 1160114669}
   - component: {fileID: 1160114668}
-  - component: {fileID: 1160114673}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2542,10 +2541,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _spriteRenderer: {fileID: 1160114671}
-  _animator: {fileID: 0}
   _maxHealth: 3
   _invincibilityDuration: 1.5
-  _deathDelay: 1
   _healthText: {fileID: 556389695}
 --- !u!50 &1160114669
 Rigidbody2D:
@@ -2679,35 +2676,13 @@ Transform:
   m_GameObject: {fileID: 1160114667}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.953, y: -2.989, z: 0}
+  m_LocalPosition: {x: 2.32, y: -2.81, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 757296885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1160114673
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160114667}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: de5cbbc941c6f014182d9e51a1302d3c, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1178658720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3270,9 +3245,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1345937758924298, guid: aea2031baec57684c94b0cb1a902dd8b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1921797344}
-    - targetCorrespondingSourceObject: {fileID: 1345937758924298, guid: aea2031baec57684c94b0cb1a902dd8b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1921797348}
   m_SourcePrefab: {fileID: 100100000, guid: aea2031baec57684c94b0cb1a902dd8b, type: 3}
 --- !u!1 &1536221446
 GameObject:
@@ -4412,8 +4384,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClassicPlatformer.Lever
   _doors: {fileID: 1098925366}
-  _leverOff: {fileID: 21300022, guid: ae3918a914038694d852d0bb81f62473, type: 3}
-  _leverOn: {fileID: 21300024, guid: ae3918a914038694d852d0bb81f62473, type: 3}
 --- !u!61 &1921797345
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4460,28 +4430,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.8125, y: 0.6041667}
   m_EdgeRadius: 0
---- !u!95 &1921797348
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921797342}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f6456d20fde255a4d8fbf46e132d1171, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1964131085
 GameObject:
   m_ObjectHideFlags: 0
