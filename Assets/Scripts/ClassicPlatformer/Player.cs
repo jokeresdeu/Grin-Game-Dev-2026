@@ -96,8 +96,8 @@ namespace ClassicPlatformer
                 Gizmos.DrawWireSphere(_groundCheck.position, _groundCheckRadius);
             }
         }
-        
-       
+
+
 
         public void TakeDamage(int damage = 1)
         {
@@ -109,6 +109,7 @@ namespace ClassicPlatformer
 
             if (_currentHealth <= 0)
             {
+                GameManager.Instance?.SetGameOver(); // <- додали
                 Destroy(gameObject);
             }
             else
