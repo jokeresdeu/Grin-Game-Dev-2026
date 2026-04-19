@@ -55,7 +55,11 @@ namespace ClassicPlatformer
                 return;
             }
 
-            // Запускаємо invincibility frames
+            // Hurt анімація через PlayerController
+            if (TryGetComponent(out PlayerController ctrl))
+                ctrl.TriggerHurtAnim();
+
+            // Invincibility frames
             _isInvincible = true;
             _invincibilityTimer = _invincibilityDuration;
         }

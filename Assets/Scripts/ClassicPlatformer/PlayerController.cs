@@ -4,6 +4,7 @@ namespace ClassicPlatformer
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlayerHealth))]
+    [RequireComponent(typeof(Animator))]
     public class PlayerController : MonoBehaviour
     {
         [Header("Movement")]
@@ -26,12 +27,24 @@ namespace ClassicPlatformer
 
         private Rigidbody2D _rb;
         private PlayerHealth _health;
+        private Animator _animator;
         private bool _isGrounded;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _health = GetComponent<PlayerHealth>();
+            _animator = GetComponent<Animator>();
+        }
+
+        private void OnEnable()
+        {
+            _health.OnDeath += OnDeath;
+        }
+
+        private void OnDisable()
+        {
+            _health.OnDeath -= OnDeath;
         }
 
         private void Update()
@@ -40,6 +53,7 @@ namespace ClassicPlatformer
             HandleJump();
             HandleAttack();
             CheckFallDeath();
+            UpdateAnimator();
         }
 
         private void FixedUpdate()
@@ -51,7 +65,7 @@ namespace ClassicPlatformer
                 _spriteRenderer.flipX = h < 0;
         }
 
-        // Raycast вниз для перевірки isGrounded
+        // Physics2D.Raycast вниз для перевірки isGrounded
         private void CheckGrounded()
         {
             RaycastHit2D hit = Physics2D.Raycast(
@@ -66,10 +80,13 @@ namespace ClassicPlatformer
         private void HandleJump()
         {
             if (Input.GetButtonDown("Jump") && _isGrounded)
+            {
                 _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpForce);
+                _animator.SetTrigger("Jump");
+            }
         }
 
-        // OverlapCircle для атаки (E або Space в режимі не-стрибок)
+        // OverlapCircle для атаки клавішею E
         private void HandleAttack()
         {
             if (!Input.GetKeyDown(KeyCode.E)) return;
@@ -92,14 +109,22 @@ namespace ClassicPlatformer
                 _health.InstantKill();
         }
 
+        private void UpdateAnimator()
+        {
+            _animator.SetBool("isMoving", Mathf.Abs(_rb.linearVelocity.x) > 0.1f);
+            _animator.SetBool("isGrounded", _isGrounded);
+        }
+
+        // Викликається з PlayerHealth.OnDeath
+        public void TriggerHurtAnim()  => _animator.SetTrigger("Hurt");
+        private void OnDeath()         => _animator.SetTrigger("Death");
+
         private void OnDrawGizmosSelected()
         {
-            // Raycast ground
             Gizmos.color = _isGrounded ? Color.green : Color.red;
             Gizmos.DrawLine(transform.position,
                 transform.position + Vector3.down * (_raycastDistance + 0.5f));
 
-            // Attack radius
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, _attackRadius);
         }
