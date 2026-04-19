@@ -34,6 +34,7 @@ namespace ClassicPlatformer
         
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
+        public bool IsGrounded => _isGrounded;
 
         private Rigidbody2D _rb;
         private float _horizontalInput;
@@ -109,11 +110,17 @@ namespace ClassicPlatformer
 
             if (_currentHealth <= 0)
             {
-                GameManager.Instance?.SetGameOver(); // <- додали
-                Destroy(gameObject);
+                if (TryGetComponent(out PlayerAnimator anim))
+                    anim.PlayDeath();
+
+                GameManager.Instance?.SetGameOver();
+                Destroy(gameObject, 1f); 
             }
             else
             {
+                if (TryGetComponent(out PlayerAnimator anim))
+                    anim.PlayHurt();
+
                 _isInvincible = true;
                 _invincibilityTimer = _invincibilityDuration;
             }
