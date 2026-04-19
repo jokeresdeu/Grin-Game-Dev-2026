@@ -10,7 +10,8 @@ namespace ClassicPlatformer
         public override void Interact(Player player)
         {
             Debug.Log("Stairs");
-            _player.EnableVerticalMovement(true);
+            _player = player;
+            _player?.EnableVerticalMovement(true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
