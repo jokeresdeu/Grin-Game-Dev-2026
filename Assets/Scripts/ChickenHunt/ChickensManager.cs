@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 namespace ChickenHunt
 {
     public class ChickensManager : MonoBehaviour
@@ -19,15 +20,22 @@ namespace ChickenHunt
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _scoreText;
-
+        [SerializeField] private TextMeshProUGUI _hpText;
+        [SerializeField] private GameObject GameOverUi;
+        [SerializeField] private Button restartButton;
+        [SerializeField] private GameObject crosshair;
         private readonly List<Chicken> _activeChickens = new();
         private float _spawnTimer;
         private int _score;
         private bool _isSpawning;
+        private int _health = 3;
 
         private void Start()
         {
+            Chest chest = FindObjectOfType<Chest>();
+            chest.ChestShot += Heal;
             StartSpawning();
+            restartButton.onClick.AddListener(RestartGame);
         }
 
         private void Update()
@@ -66,6 +74,7 @@ namespace ChickenHunt
                     chicken.OnDeath -= OnChickenDeath;
                     _activeChickens.RemoveAt(i);
                     Destroy(chicken.gameObject);
+                    TakeDamage();
                 }
             }
         }
@@ -76,6 +85,7 @@ namespace ChickenHunt
             _spawnTimer = 0f;
             _score = 0;
             UpdateScoreUI();
+            UpdateHealthUi();
         }
 
         public void StopSpawning()
@@ -85,13 +95,13 @@ namespace ChickenHunt
 
         private void SpawnChicken()
         {
-            if (_spawnPoints == null || _spawnPoints.Length == 0) 
+            if (_spawnPoints == null || _spawnPoints.Length == 0)
                 return;
 
             int pointIndex = Random.Range(0, _spawnPoints.Length);
             SpawnPoint spawnPoint = _spawnPoints[pointIndex];
 
-            if (spawnPoint == null) 
+            if (spawnPoint == null)
                 return;
 
             Chicken chicken = spawnPoint.Spawn();
@@ -113,6 +123,35 @@ namespace ChickenHunt
         {
             if (_scoreText != null)
                 _scoreText.text = $"Score: {_score}";
+        }
+        private void Heal()
+        {
+            _health++;
+            UpdateHealthUi();
+        }
+        private void TakeDamage()
+        {
+            _health--;
+            UpdateHealthUi();
+            if (_health == 0) GameOver();
+        }
+        private void UpdateHealthUi()
+        {
+            if (_hpText != null)
+                _hpText.text = $"{_health}";
+        }
+
+        private void GameOver()
+        {
+            crosshair.SetActive(false);
+            GameOverUi.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
+        private void RestartGame()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void OnDestroy()

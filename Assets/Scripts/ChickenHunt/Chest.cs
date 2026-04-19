@@ -5,9 +5,10 @@ namespace ChickenHunt
 {
     public class Chest : MonoBehaviour, IShootable
     {
+        public event System.Action ChestShot;
         public void OnShoot()
         {
-            Debug.LogError("You shot chest");
+            ChestShot?.Invoke();
             Destroy(gameObject);
         }
     }
