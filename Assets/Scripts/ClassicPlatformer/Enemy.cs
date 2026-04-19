@@ -41,17 +41,32 @@ namespace ClassicPlatformer
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            // Підтримка старого Health компонента
             var health = collision.gameObject.GetComponent<Health>();
-            if (health == null) return;
+            if (health != null)
+            {
+                if (collision.contacts[0].normal.y < -0.5f)
+                    Destroy(gameObject);
+                else
+                    health.TakeDamage(_damage);
+                return;
+            }
 
-            if (collision.contacts[0].normal.y < -0.5f)
+            // Підтримка нового PlayerHealth компонента
+            var playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
             {
-                Destroy(gameObject);
+                if (collision.contacts[0].normal.y < -0.5f)
+                    Destroy(gameObject);
+                else
+                    playerHealth.TakeDamage(_damage);
             }
-            else
-            {
-                health.TakeDamage(_damage);
-            }
+        }
+
+        // Викликається через Physics2D.OverlapCircle атаки гравця
+        public void TakeDamage(int damage = 1)
+        {
+            Destroy(gameObject);
         }
 
         private void OnDrawGizmosSelected()

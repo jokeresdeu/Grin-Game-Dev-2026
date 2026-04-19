@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace ClassicPlatformer
 {
@@ -7,12 +8,14 @@ namespace ClassicPlatformer
     {
         public static GameManager Instance { get; private set; }
 
-        [Header("UI")]
-        [SerializeField] private TextMeshProUGUI _coinsText;
+        public enum GameState { Playing, GameOver }
 
-        private int _coins;
+        public static int Score { get; private set; }
 
-        public int Coins => _coins;
+        public GameState CurrentState { get; private set; } = GameState.Playing;
+
+        public event Action<int> OnScoreChanged;
+        public event Action OnGameOver;
 
         private void Awake()
         {
@@ -22,29 +25,31 @@ namespace ClassicPlatformer
                 return;
             }
             Instance = this;
+            Score = 0;
         }
 
-        private void Start()
+        // Додає очки (монети через CoinCollectible)
+        public void AddScore(int amount)
         {
-            UpdateCoinsUI();
+            if (CurrentState != GameState.Playing) return;
+            Score += amount;
+            OnScoreChanged?.Invoke(Score);
         }
 
-        public void AddCoins(int amount)
+        // Зворотна сумісність зі старим кодом
+        public void AddCoins(int amount) => AddScore(amount);
+
+        public void TriggerGameOver()
         {
-            _coins += amount;
-            UpdateCoinsUI();
+            if (CurrentState == GameState.GameOver) return;
+            CurrentState = GameState.GameOver;
+            OnGameOver?.Invoke();
         }
 
-        public void ResetCoins()
+        public void RestartGame()
         {
-            _coins = 0;
-            UpdateCoinsUI();
-        }
-
-        private void UpdateCoinsUI()
-        {
-            if (_coinsText != null)
-                _coinsText.text = $"Coins: {_coins}";
+            Score = 0;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
