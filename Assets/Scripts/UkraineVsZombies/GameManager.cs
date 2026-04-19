@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace UkraineVsZombies
 {
@@ -19,14 +20,21 @@ namespace UkraineVsZombies
 
         [Header("Game Stats")]
         [SerializeField] private int _maxMissed = 5;
+        [SerializeField] private int _enemiesToWin = 30;
 
         private int _score;
         private int _missed;
+        private int _killed;
 
         [Header("UI")]
         [SerializeField] private TMP_Text _scoreText;
         [SerializeField] private TMP_Text _missedText;
+
         [SerializeField] private GameObject _gameOverPanel;
+        [SerializeField] private GameObject _winPanel;
+        [SerializeField] private TMP_Text _winScoreText;
+
+        [SerializeField] private GameObject _pausePanel;
 
         private readonly Dictionary<int, List<Enemy>> _enemiesByLane = new();
         private readonly Dictionary<int, List<Tower>> _towersByLane = new();
@@ -35,7 +43,6 @@ namespace UkraineVsZombies
         private bool _isGameOver;
 
         public static GameManager Instance { get; private set; }
-        public bool IsGameActive => !_isGameOver;
 
         private void Awake()
         {
@@ -50,8 +57,9 @@ namespace UkraineVsZombies
 
         private void Start()
         {
-            if (_gameOverPanel != null)
-                _gameOverPanel.SetActive(false);
+            if (_gameOverPanel != null) _gameOverPanel.SetActive(false);
+            if (_winPanel != null) _winPanel.SetActive(false);
+            if (_pausePanel != null) _pausePanel.SetActive(false);
 
             _spawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
 
@@ -61,6 +69,9 @@ namespace UkraineVsZombies
         private void Update()
         {
             if (_isGameOver) return;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                TogglePause();
 
             UpdateSpawning();
             CleanupLists();
@@ -84,12 +95,8 @@ namespace UkraineVsZombies
 
         private void SpawnEnemy()
         {
-            if (_spawnPoints == null || _spawnPoints.Length == 0) return;
-
             int index = Random.Range(0, _spawnPoints.Length);
             var spawnPoint = _spawnPoints[index];
-
-            if (spawnPoint == null) return;
 
             Enemy enemy = spawnPoint.Spawn();
 
@@ -97,11 +104,8 @@ namespace UkraineVsZombies
                 RegisterEnemy(enemy, index);
         }
 
-
         public void RegisterEnemy(Enemy enemy, int lane)
         {
-            if (lane < 0 || lane >= _laneCount) return;
-
             _enemiesByLane[lane].Add(enemy);
 
             enemy.Initialize();
@@ -114,31 +118,16 @@ namespace UkraineVsZombies
 
         public void RegisterTower(Tower tower, int lane)
         {
-            if (lane < 0 || lane >= _laneCount) return;
-
             _towersByLane[lane].Add(tower);
         }
-
 
         private void CleanupLists()
         {
             foreach (var list in _enemiesByLane.Values)
-            {
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    if (list[i] == null)
-                        list.RemoveAt(i);
-                }
-            }
+                list.RemoveAll(e => e == null);
 
             foreach (var list in _towersByLane.Values)
-            {
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    if (list[i] == null)
-                        list.RemoveAt(i);
-                }
-            }
+                list.RemoveAll(t => t == null);
         }
 
         private void UpdateTargets()
@@ -178,7 +167,12 @@ namespace UkraineVsZombies
             if (_isGameOver) return;
 
             _score += amount;
+            _killed++;
+
             UpdateUI();
+
+            if (_killed >= _enemiesToWin)
+                WinGame();
         }
 
         public void EnemyMissed()
@@ -192,12 +186,27 @@ namespace UkraineVsZombies
                 GameOver();
         }
 
+        private void WinGame()
+        {
+            if (_isGameOver) return;
+
+            _isGameOver = true;
+            Time.timeScale = 0f;
+
+            if (_winPanel != null)
+            {
+                _winPanel.SetActive(true);
+
+                if (_winScoreText != null)
+                    _winScoreText.text = $"Your final score: {_score}";
+            }
+        }
+
         private void GameOver()
         {
             if (_isGameOver) return;
 
             _isGameOver = true;
-
             Time.timeScale = 0f;
 
             if (_gameOverPanel != null)
@@ -211,6 +220,39 @@ namespace UkraineVsZombies
 
             if (_missedText != null)
                 _missedText.text = $"Missed: {_missed}/{_maxMissed}";
+        }
+
+        public void Restart()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public void Resume()
+        {
+            if (_pausePanel != null)
+                _pausePanel.SetActive(false);
+
+            Time.timeScale = 1f;
+        }
+
+        public void Quit()
+        {
+            Application.Quit();
+        }
+        public void LoadMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        public void TogglePause()
+        {
+            if (_pausePanel == null) return;
+
+            bool isActive = _pausePanel.activeSelf;
+            _pausePanel.SetActive(!isActive);
+
+            Time.timeScale = isActive ? 1f : 0f;
         }
     }
 }
