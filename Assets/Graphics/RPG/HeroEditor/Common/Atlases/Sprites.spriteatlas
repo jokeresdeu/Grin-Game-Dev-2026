@@ -138,6 +138,18 @@ SpriteAtlas:
     - f72b220400a304b4e9bf330ae0b157fc: 21300000
     - be6fb90474194d2ca4b6ef82bf30eac3: 21300000
     - 9b5d8a04eefd4e29a08c70770cfdb3d0: 21300000
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300016
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300018
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300012
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300022
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300006
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300002
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300004
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300000
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300014
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300020
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300008
+    - 4fa0f6247bf4712448cc3a4ac1972e7e: 21300010
     - 30bd983403a74c98a229a5dbe97e2140: 21300000
     - 3802004455bc4328a5f621fc79e65ed8: 21300000
     - 32262144aa4643c2be32b9b414120052: 21300000
@@ -353,18 +365,17 @@ SpriteAtlas:
     - eb0485dc0d6e43ffb4ef1a4ebc996d15: 21300000
     - 93aebedc117742439715aa592b952dd2: 21300000
     - 49ecf5fc28d3404fa875cd2382a15bd2: 21300000
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300016
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300018
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300012
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300022
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300006
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300002
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300004
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300000
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300014
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300020
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300008
-    - 7f049dfc29eb4a27a35fe07f89e20e2a: 21300010
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -1829821502
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -342281399
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -897612808
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -222035829
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -225536755
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -1637614456
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: 417873812
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: 1285603899
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: 837805429
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: -1946203843
+    - 7f049dfc29eb4a27a35fe07f89e20e2a: 1454368756
     - 9ce7021d49c8b914b99b5e846dd34311: 21300000
     - 8b2bfa1dc760bb142b60b8b9c1688c70: 21300000
     - 3f40b92d8dc04bd4aac82c0b129a2336: 21300000
@@ -490,6 +501,18 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f72b220400a304b4e9bf330ae0b157fc, type: 3}
   - {fileID: 21300000, guid: be6fb90474194d2ca4b6ef82bf30eac3, type: 3}
   - {fileID: 21300000, guid: 9b5d8a04eefd4e29a08c70770cfdb3d0, type: 3}
+  - {fileID: 21300016, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300018, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300012, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300022, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300006, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300002, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300004, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300000, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300014, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300020, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300008, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
+  - {fileID: 21300010, guid: 4fa0f6247bf4712448cc3a4ac1972e7e, type: 3}
   - {fileID: 21300000, guid: 30bd983403a74c98a229a5dbe97e2140, type: 3}
   - {fileID: 21300000, guid: 3802004455bc4328a5f621fc79e65ed8, type: 3}
   - {fileID: 21300000, guid: 32262144aa4643c2be32b9b414120052, type: 3}
@@ -705,18 +728,17 @@ SpriteAtlas:
   - {fileID: 21300000, guid: eb0485dc0d6e43ffb4ef1a4ebc996d15, type: 3}
   - {fileID: 21300000, guid: 93aebedc117742439715aa592b952dd2, type: 3}
   - {fileID: 21300000, guid: 49ecf5fc28d3404fa875cd2382a15bd2, type: 3}
-  - {fileID: 21300016, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300018, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300012, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300022, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300006, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300002, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300004, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300000, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300014, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300020, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300008, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
-  - {fileID: 21300010, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -1829821502, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -342281399, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -897612808, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -222035829, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -225536755, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -1637614456, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: 417873812, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: 1285603899, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: 837805429, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: -1946203843, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
+  - {fileID: 1454368756, guid: 7f049dfc29eb4a27a35fe07f89e20e2a, type: 3}
   - {fileID: 21300000, guid: 9ce7021d49c8b914b99b5e846dd34311, type: 3}
   - {fileID: 21300000, guid: 8b2bfa1dc760bb142b60b8b9c1688c70, type: 3}
   - {fileID: 21300000, guid: 3f40b92d8dc04bd4aac82c0b129a2336, type: 3}
@@ -841,6 +863,18 @@ SpriteAtlas:
   - ElfaHair
   - ZombieEyes1
   - Bored
+  - HandL
+  - HandR
+  - Leg
+  - Finger
+  - Pelvis
+  - ArmR
+  - ArmL
+  - Torso
+  - Shin
+  - SleeveR
+  - ForearmR
+  - ForearmL
   - Annoyed
   - Eyes12
   - Enrage
@@ -1056,18 +1090,17 @@ SpriteAtlas:
   - 11
   - Sad
   - Beard3
-  - HandL
-  - HandR
-  - Leg
-  - Finger
-  - Pelvis
-  - ArmR
-  - ArmL
-  - Torso
-  - Shin
-  - SleeveR
-  - ForearmR
-  - ForearmL
+  - Human_10
+  - Human_9
+  - Human_8
+  - Human_7
+  - Human_6
+  - Human_5
+  - Human_4
+  - Human_3
+  - Human_2
+  - Human_1
+  - Human_0
   - ValkyrieHair
   - Fruitcake
   - Beard1

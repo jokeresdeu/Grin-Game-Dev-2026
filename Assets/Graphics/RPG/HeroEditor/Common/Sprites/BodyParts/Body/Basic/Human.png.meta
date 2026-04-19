@@ -231,265 +231,243 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Torso
+      name: Human_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 282
-        width: 235
-        height: 230
+        x: 74
+        y: 349
+        width: 78
+        height: 84
       alignment: 9
-      pivot: {x: 0.497392, y: 0.40933985}
+      pivot: {x: 0.5161723, y: 0.8078402}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 88ccc3241acfc3a4da1f0edeb4f6342c
-      internalID: 21300000
+      spriteID: 64ab12d01fee0664694ac32755b084f7
+      internalID: 1454368756
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ArmR
+      name: Human_1
       rect:
         serializedVersion: 2
-        x: 235
-        y: 352
-        width: 140
-        height: 160
+        x: 281
+        y: 397
+        width: 55
+        height: 59
       alignment: 9
-      pivot: {x: 0.5937716, y: 0.5414793}
+      pivot: {x: 0.85548484, y: 0.86345243}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 64d910f4c78dc154788a5bfaa1d4fc9d
-      internalID: 21300002
+      spriteID: c26087c5aebaba149923e5da621447f5
+      internalID: -1946203843
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ArmL
+      name: Human_2
       rect:
         serializedVersion: 2
-        x: 375
-        y: 352
-        width: 137
-        height: 160
+        x: 421
+        y: 406
+        width: 48
+        height: 53
       alignment: 9
-      pivot: {x: 0.46447864, y: 0.55866164}
+      pivot: {x: 0.23720996, y: 0.8331984}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 106ce12b70f4c1d4a9a562ddb4dce347
-      internalID: 21300004
+      spriteID: 707bfcb8192c9c4459769242e9d54c50
+      internalID: 837805429
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pelvis
+      name: Human_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 125
-        width: 235
-        height: 157
+        x: 272
+        y: 268
+        width: 44
+        height: 44
       alignment: 9
-      pivot: {x: 0.49844185, y: 0.58668023}
+      pivot: {x: 0.57167053, y: 0.6003376}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0250db624298dcc4b8f204f2a4f2f47c
-      internalID: 21300006
+      spriteID: 417647a6eb5f44948990e9649de2f674
+      internalID: 1285603899
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForearmR
+      name: Human_4
       rect:
         serializedVersion: 2
-        x: 235
-        y: 227
-        width: 117
-        height: 125
+        x: 393
+        y: 245
+        width: 71
+        height: 53
       alignment: 9
-      pivot: {x: 0.54611313, y: 0.5769509}
+      pivot: {x: 0.5266492, y: 0.5594995}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d930b4889e795df43b2e432ca68cfaa7
-      internalID: 21300008
+      spriteID: eff8d83d4b9dbca4193e3baab67446c9
+      internalID: 417873812
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ForearmL
+      name: Human_5
       rect:
         serializedVersion: 2
-        x: 352
-        y: 192
-        width: 160
-        height: 160
+        x: 82
+        y: 159
+        width: 70
+        height: 70
       alignment: 9
-      pivot: {x: 0.4460636, y: 0.53986853}
+      pivot: {x: 0.49099013, y: 0.8063381}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5357312cb3dc3d64eacbbce881308f72
-      internalID: 21300010
+      spriteID: 2161c9bfbd749bc468eafc1e73d2e96f
+      internalID: -1637614456
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Leg
+      name: Human_6
       rect:
         serializedVersion: 2
-        x: 115
-        y: 0
-        width: 120
-        height: 125
+        x: 271
+        y: 153
+        width: 40
+        height: 42
       alignment: 9
-      pivot: {x: 0.5031316, y: 0.52115256}
+      pivot: {x: 0.6734436, y: 0.7702982}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2accc8c629f4c844a85cdb4c1d799be4
-      internalID: 21300012
+      spriteID: a44eb6ae6f8700e48a5fee8419c631b8
+      internalID: -225536755
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shin
+      name: Human_7
       rect:
         serializedVersion: 2
-        x: 235
-        y: 0
-        width: 117
-        height: 125
-      alignment: 9
-      pivot: {x: 0.5138599, y: 0.61315286}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 161e54a0a7a88ba46917340983ca82e8
-      internalID: 21300014
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HandL
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 115
-        height: 125
-      alignment: 9
-      pivot: {x: 0.5098691, y: 0.47720703}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 08b8a2e5544ffed4490442663be2252a
-      internalID: 21300016
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HandR
-      rect:
-        serializedVersion: 2
-        x: 235
-        y: 125
-        width: 117
-        height: 102
-      alignment: 9
-      pivot: {x: 0.47995466, y: 0.4912262}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6e48e209ef418fd488c1afe8b8634d79
-      internalID: 21300018
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SleeveR
-      rect:
-        serializedVersion: 2
-        x: 352
-        y: 125
-        width: 74
-        height: 67
+        x: 433
+        y: 166
+        width: 18
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2fb6862db8b046c48aabdd6d9716462e
-      internalID: 21300020
+      spriteID: c16073b40888b5841b3dba752ec9b10f
+      internalID: -222035829
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Finger
+      name: Human_8
       rect:
         serializedVersion: 2
-        x: 426
-        y: 160
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 45
+        y: 43
+        width: 30
+        height: 26
+      alignment: 9
+      pivot: {x: 0.4159064, y: 0.7425744}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9a0cbd7b881630c419d624228f9910e3
-      internalID: 21300022
+      spriteID: 1fd7f79cf2a30f64d8402ec23c3c1300
+      internalID: -897612808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Human_9
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 28
+        width: 33
+        height: 37
+      alignment: 9
+      pivot: {x: 0.51911235, y: 0.7727336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 744f2f555bdeed54d8e9d9b96506eb87
+      internalID: -342281399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Human_10
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 35
+        width: 38
+        height: 47
+      alignment: 9
+      pivot: {x: 0.48340327, y: 0.754963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cac5ff1d139a5cf478cc98e04975260f
+      internalID: -1829821502
       vertices: []
       indices: 
       edges: []
@@ -498,7 +476,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 31a0a5204de23b54d8351ac0c142c262
     internalID: 0
     vertices: []
     indices: 
@@ -506,20 +484,21 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      ArmL: 21300004
-      ArmR: 21300002
-      Finger: 21300022
-      ForearmL: 21300010
-      ForearmR: 21300008
-      HandL: 21300016
-      HandR: 21300018
-      Leg: 21300012
-      Pelvis: 21300006
-      Shin: 21300014
-      SleeveR: 21300020
-      Torso: 21300000
+      Human_0: 1454368756
+      Human_1: -1946203843
+      Human_10: -1829821502
+      Human_2: 837805429
+      Human_3: 1285603899
+      Human_4: 417873812
+      Human_5: -1637614456
+      Human_6: -225536755
+      Human_7: -222035829
+      Human_8: -897612808
+      Human_9: -342281399
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

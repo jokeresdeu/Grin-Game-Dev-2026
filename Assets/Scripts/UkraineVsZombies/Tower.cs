@@ -23,6 +23,8 @@ namespace UkraineVsZombies
         private float _currentHealth;
         private float _fireTimer;
         private Enemy _target;
+        private Animator _anim;
+
         public bool IsAlive => _currentHealth > 0;
         public float Range => _range;
 
@@ -30,6 +32,8 @@ namespace UkraineVsZombies
         {
             if (_firePoint == null)
                 _firePoint = transform;
+
+            _anim = GetComponentInChildren<Animator>();
 
             _currentHealth = _maxHealth;
             UpdateHpBar();
@@ -68,6 +72,11 @@ namespace UkraineVsZombies
 
         private void Fire()
         {
+            if (_anim != null)
+            {
+                _anim.SetTrigger("Shoot");
+            }
+
             if (_projectilePrefab != null)
             {
                 var obj = Instantiate(_projectilePrefab, _firePoint.position, Quaternion.identity);
@@ -90,7 +99,18 @@ namespace UkraineVsZombies
 
             if (_currentHealth <= 0f)
             {
-                Destroy(gameObject);
+                var collider = GetComponent<Collider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+
+                if (_anim != null)
+                {
+                    _anim.SetTrigger("Die");
+                }
+
+                Destroy(gameObject, 1f);
             }
         }
 

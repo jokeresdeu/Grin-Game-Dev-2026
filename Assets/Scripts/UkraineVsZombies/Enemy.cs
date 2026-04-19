@@ -19,6 +19,7 @@ namespace UkraineVsZombies
         private float _attackTimer;
         private Tower _targetTower;
         private Transform _wallTransform;
+        private Animator _anim;
 
         public event Action OnDeath;
         public bool IsAlive => _currentHealth > 0;
@@ -36,6 +37,7 @@ namespace UkraineVsZombies
 
         private void Awake()
         {
+            _anim = GetComponentInChildren<Animator>();
             if (_currentHealth <= 0f) Initialize();
         }
 
@@ -87,6 +89,11 @@ namespace UkraineVsZombies
             _attackTimer -= Time.deltaTime;
             if (_attackTimer <= 0f)
             {
+                if (_anim != null)
+                {
+                    _anim.SetTrigger("Attack");
+                }
+
                 _targetTower.TakeDamage(_attackDamage);
                 _attackTimer = 1f / _attackRate;
             }
@@ -104,8 +111,19 @@ namespace UkraineVsZombies
                 if (GameManager.Instance != null)
                     GameManager.Instance.AddScore(10);
 
+                var collider = GetComponent<Collider2D>();
+                if (collider != null)
+                {
+                    collider.enabled = false;
+                }
+
+                if (_anim != null)
+                {
+                    _anim.SetTrigger("Die");
+                }
+
                 OnDeath?.Invoke();
-                Destroy(gameObject);
+                Destroy(gameObject, 1f);
             }
         }
 
