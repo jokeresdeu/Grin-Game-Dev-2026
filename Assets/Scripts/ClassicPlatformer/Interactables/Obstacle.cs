@@ -10,7 +10,11 @@ namespace ClassicPlatformer
 
         public override void Interact(Player player)
         {
-            player.TakeDamage(_damage);
+            if (_instantKill)
+                player.TakeDamage(player.MaxHealth);
+            else
+                player.TakeDamage(_damage);
+
             Debug.Log("Obstacle");
         }
     }

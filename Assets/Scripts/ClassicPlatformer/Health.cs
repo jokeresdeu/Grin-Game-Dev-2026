@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace ClassicPlatformer
 {
@@ -13,11 +14,15 @@ namespace ClassicPlatformer
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _healthText;
+        [SerializeField] private Slider _healthSlider;
+        [SerializeField] private Image _healthFillImage;
+        [SerializeField] private Color _healthColorFull = Color.green;
+        [SerializeField] private Color _healthColorLow = Color.red;
 
         private int _currentHealth;
         private float _invincibilityTimer;
         private bool _isInvincible;
-        
+
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
 
@@ -51,7 +56,8 @@ namespace ClassicPlatformer
 
             if (_currentHealth <= 0)
             {
-               Destroy(gameObject);
+                GameManager.Instance?.OnPlayerDied();
+                Destroy(gameObject);
             }
             else
             {
@@ -71,8 +77,19 @@ namespace ClassicPlatformer
 
         private void UpdateUI()
         {
+            float ratio = (float)_currentHealth / _maxHealth;
+
             if (_healthText != null)
                 _healthText.text = $"HP: {_currentHealth}/{_maxHealth}";
+
+            if (_healthSlider != null)
+            {
+                _healthSlider.maxValue = _maxHealth;
+                _healthSlider.value = _currentHealth;
+            }
+
+            if (_healthFillImage != null)
+                _healthFillImage.color = Color.Lerp(_healthColorLow, _healthColorFull, ratio);
         }
     }
 }
