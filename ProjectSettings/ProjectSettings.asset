@@ -772,6 +772,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
+<<<<<<< HEAD
   scriptingDefineSymbols:
     Android: DOTWEEN
     EmbeddedLinux: DOTWEEN
@@ -791,6 +792,9 @@ PlayerSettings:
     XboxOne: DOTWEEN
     iPhone: DOTWEEN
     tvOS: DOTWEEN
+=======
+  scriptingDefineSymbols: {}
+>>>>>>> 81fe513a15e9c1e0fde7e370565a38b3f5ca8216
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
