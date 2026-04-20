@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Періодично створює бонусні об'єкти (PowerUp) у випадковій позиції.
-/// </summary>
 public class PowerUpSpawner : MonoBehaviour
 {
     [Header("Prefab")]

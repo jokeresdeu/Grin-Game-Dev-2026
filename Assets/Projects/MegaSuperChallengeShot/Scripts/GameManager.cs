@@ -2,12 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Центральний менеджер гри. Керує станом гри (Playing / GameOver),
-/// рахунком, кількістю життів та перезапуском сцени.
-/// Singleton — один екземпляр на сцену (без DontDestroyOnLoad,
-/// щоб коректно працював перезапуск).
-/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -25,8 +19,8 @@ public class GameManager : MonoBehaviour
 
     // --- події для UI ---
     public event Action<int> OnScoreChanged;
-    public event Action<int, int> OnLivesChanged;      // current, max
-    public event Action<int, int> OnShotsChanged;       // current, max
+    public event Action<int, int> OnLivesChanged;
+    public event Action<int, int> OnShotsChanged;
     public event Action<GameState> OnStateChanged;
 
     // --- публічні властивості ---
@@ -37,9 +31,6 @@ public class GameManager : MonoBehaviour
     public int CurrentShots => _currentShots;
     public int MaxShots => maxShots;
 
-    // =========================================================================
-    // Unity lifecycle
-    // =========================================================================
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -60,9 +51,6 @@ public class GameManager : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
-    // =========================================================================
-    // Game flow
-    // =========================================================================
     public void StartNewGame()
     {
         _score = 0;
@@ -99,7 +87,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // --- Shots ---
     public bool TryShoot()
     {
         if (_state != GameState.Playing) return false;
@@ -116,13 +103,11 @@ public class GameManager : MonoBehaviour
         OnShotsChanged?.Invoke(_currentShots, maxShots);
     }
 
-    // --- Restart ---
     public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // --- State machine ---
     private void SetState(GameState newState)
     {
         _state = newState;

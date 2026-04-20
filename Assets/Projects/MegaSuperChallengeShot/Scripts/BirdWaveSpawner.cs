@@ -1,9 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Спавнер птахів хвилями. Створює птахів з випадковою позицією по Y
-/// з лівого або правого краю екрану.
-/// </summary>
 public class BirdWaveSpawner : MonoBehaviour
 {
     [Header("Prefabs")]
@@ -33,7 +29,7 @@ public class BirdWaveSpawner : MonoBehaviour
     {
         _cam = Camera.main;
         _currentInterval = spawnInterval;
-        _timer = 1f; // невелика початкова затримка
+        _timer = 1f;
     }
 
     private void Update()
@@ -57,7 +53,6 @@ public class BirdWaveSpawner : MonoBehaviour
         Bird prefab = ChoosePrefab();
         if (prefab == null) return;
 
-        // Випадкова сторона: ліва чи права
         bool fromLeft = Random.value > 0.5f;
 
         float screenEdgeX;

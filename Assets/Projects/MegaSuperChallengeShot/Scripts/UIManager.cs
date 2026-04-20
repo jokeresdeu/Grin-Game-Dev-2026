@@ -2,11 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Відображає ігрову інформацію через UI: очки (TMP), життя (Slider + Image),
-/// патрони (TMP), та панель Game Over.
-/// Підписується на події GameManager.
-/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("Score")]
@@ -47,9 +42,6 @@ public class UIManager : MonoBehaviour
         Unsubscribe();
     }
 
-    // =========================================================================
-    // Event subscription
-    // =========================================================================
     private bool _subscribed;
 
     private void Subscribe()
@@ -62,7 +54,6 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.OnShotsChanged += UpdateShots;
         GameManager.Instance.OnStateChanged += UpdateState;
 
-        // Initial refresh
         UpdateScore(GameManager.Instance.Score);
         UpdateLives(GameManager.Instance.CurrentLives, GameManager.Instance.MaxLives);
         UpdateShots(GameManager.Instance.CurrentShots, GameManager.Instance.MaxShots);
@@ -79,9 +70,6 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.OnStateChanged -= UpdateState;
     }
 
-    // =========================================================================
-    // UI updaters
-    // =========================================================================
     private void UpdateScore(int score)
     {
         if (scoreText != null)

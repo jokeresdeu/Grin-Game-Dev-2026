@@ -22,7 +22,7 @@ public class CrosshairController : MonoBehaviour
     void Update()
     {
         Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = 0; // Set a fixed distance from the camera
+        mousePosition.z = 0;
         Vector3 worldPosition = _main.ScreenToWorldPoint(mousePosition);
         worldPosition.z = 0;
         transform.position = worldPosition;

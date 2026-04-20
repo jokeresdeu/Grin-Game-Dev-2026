@@ -10,7 +10,6 @@ public class BirdMover : MonoBehaviour
         Debug.Log("Hello world");
     }
 
-    // Update is called once per frame
     void Update() 
     {
         transform.position += Vector3.right * _speed;

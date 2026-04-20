@@ -1,19 +1,14 @@
 using UnityEngine;
 
-/// <summary>
-/// Компонент птаха. Рухається в заданому напрямку, має різні типи
-/// (звичайний, швидкий, бонусний). Дає очки при знищенні.
-/// При виході за межі екрану — гравець втрачає життя (Trigger).
-/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class Bird : MonoBehaviour
 {
     public enum BirdType
     {
-        Normal,     // 1 очко
-        Fast,       // 2 очки, швидший
-        Bonus       // 3 очки, ще швидший
+        Normal,
+        Fast,
+        Bonus
     }
 
     [Header("Movement")]
@@ -83,13 +78,9 @@ public class Bird : MonoBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Задає напрямок руху (використовується спавнером).
-    /// </summary>
     public void SetDirection(Vector2 dir)
     {
         moveDirection = dir;
-        // Розвертаємо спрайт якщо рухається вліво
         if (dir.x < 0)
         {
             Vector3 scale = transform.localScale;

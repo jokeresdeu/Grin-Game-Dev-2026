@@ -1,12 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Прикріплюється до Crosshair. Кожен кадр перевіряє область
-/// навколо курсора за допомогою Physics2D.OverlapBoxAll — якщо
-/// знаходить PowerUp, збирає його.
-///
-/// Це — приклад використання Physics2D.OverlapBox (Overlap*).
-/// </summary>
 public class PowerUpCollector : MonoBehaviour
 {
     [Header("Collection Area (OverlapBox)")]
@@ -18,7 +11,6 @@ public class PowerUpCollector : MonoBehaviour
         if (GameManager.Instance == null) return;
         if (GameManager.Instance.State != GameState.Playing) return;
 
-        // --- Physics2D.OverlapBoxAll ---
         Collider2D[] hits = Physics2D.OverlapBoxAll(
             transform.position, collectionSize, 0f, powerUpLayer);
 

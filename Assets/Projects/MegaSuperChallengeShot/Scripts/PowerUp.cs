@@ -1,19 +1,12 @@
 using UnityEngine;
 
-/// <summary>
-/// Бонусний об'єкт, що з'являється випадково.
-/// Виявляється за допомогою Physics2D.OverlapBox (кожні N секунд
-/// перевіряємо область навколо курсора). При «зборі» відновлює патрони.
-///
-/// Це — додатковий приклад використання Physics2D.Overlap*.
-/// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class PowerUp : MonoBehaviour
 {
     public enum PowerUpType
     {
-        Reload,       // перезарядка
-        ExtraLife     // додаткове життя
+        Reload,
+        ExtraLife
     }
 
     [SerializeField] private PowerUpType type = PowerUpType.Reload;
@@ -32,16 +25,12 @@ public class PowerUp : MonoBehaviour
 
     private void Update()
     {
-        // Невелика анімація «покачування»
         _timer += Time.deltaTime;
         Vector3 pos = _startPos;
         pos.y += Mathf.Sin(_timer * bobSpeed) * bobAmplitude;
         transform.position = pos;
     }
 
-    /// <summary>
-    /// Викликається OverlapBox-перевіркою з PowerUpCollector.
-    /// </summary>
     public void Collect()
     {
         if (GameManager.Instance == null) return;
@@ -52,7 +41,6 @@ public class PowerUp : MonoBehaviour
                 GameManager.Instance.Reload();
                 break;
             case PowerUpType.ExtraLife:
-                // Не додаємо понад максимум — просто перезавантажуємо патрони
                 GameManager.Instance.Reload();
                 break;
         }
