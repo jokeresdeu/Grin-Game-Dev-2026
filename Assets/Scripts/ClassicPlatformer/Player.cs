@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace ClassicPlatformer
         [Header("Movement")]
         [SerializeField] private float _moveSpeed = 7f;
         [SerializeField] private float _climbSpeed = 3.5f;
-        [SerializeField] private float _jumpForce = 14f;
+        [SerializeField] private float _jumpForce = 4f;
 
         [Header("Ground Detection")]
         [SerializeField] private Transform _groundCheck;
@@ -37,6 +38,9 @@ namespace ClassicPlatformer
 
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
+
+        public event Action<int, int> OnHealthChanged;
+        public event Action OnDeath;
 
         private Rigidbody2D _rb;
         private Animator _animator;
@@ -134,6 +138,7 @@ namespace ClassicPlatformer
             _rb.linearVelocity = Vector2.zero;
             _rb.bodyType = RigidbodyType2D.Kinematic;
             _animator.SetTrigger("Death");
+            OnDeath?.Invoke();
             yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }
@@ -151,6 +156,7 @@ namespace ClassicPlatformer
         {
             if (_healthText != null)
                 _healthText.text = $"HP: {_currentHealth}/{_maxHealth}";
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
         }
     }
 }

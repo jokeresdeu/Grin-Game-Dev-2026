@@ -1,88 +1,54 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ClassicPlatformer
 {
     public class UIManager : MonoBehaviour
     {
-        [Header("HP — Slider")]
-        [SerializeField] private Slider _hpSlider;
+        [SerializeField] private Player _player;
+        [SerializeField] private TextMeshProUGUI _hpText;
+        [SerializeField] private TextMeshProUGUI _timerText;
 
-        [Header("Score — TMP")]
-        [SerializeField] private TextMeshProUGUI _scoreText;
-
-        [Header("GameOver Panel")]
-        [SerializeField] private GameObject _gameOverPanel;
-        [SerializeField] private TextMeshProUGUI _gameOverScoreText;
-        [SerializeField] private Button _restartButton;
-
-        [Header("Player")]
-        [SerializeField] private PlayerHealth _playerHealth;
+        private float _elapsed;
+        private bool _running;
 
         private void Start()
         {
-            // Підписуємося на події
-            if (_playerHealth != null)
+            if (_player != null)
             {
-                _playerHealth.OnHealthChanged += UpdateHP;
-                _playerHealth.OnDeath += ShowGameOver;
-                UpdateHP(_playerHealth.CurrentHealth, _playerHealth.MaxHealth);
+                _player.OnHealthChanged += UpdateHP;
+                _player.OnDeath += StopTimer;
+                UpdateHP(_player.CurrentHealth, _player.MaxHealth);
             }
-
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnScoreChanged += UpdateScore;
-                GameManager.Instance.OnGameOver += ShowGameOver;
-            }
-
-            if (_restartButton != null)
-                _restartButton.onClick.AddListener(GameManager.Instance.RestartGame);
-
-            if (_gameOverPanel != null)
-                _gameOverPanel.SetActive(false);
-
-            UpdateScore(GameManager.Score);
-        }
-
-        // HP Slider: value 0..1
-        private void UpdateHP(int current, int max)
-        {
-            if (_hpSlider == null) return;
-            _hpSlider.maxValue = max;
-            _hpSlider.value = current;
-        }
-
-        // Score TMP
-        private void UpdateScore(int score)
-        {
-            if (_scoreText != null)
-                _scoreText.text = $"Score: {score}";
-        }
-
-        // GameOver панель
-        private void ShowGameOver()
-        {
-            if (_gameOverPanel != null)
-                _gameOverPanel.SetActive(true);
-
-            if (_gameOverScoreText != null)
-                _gameOverScoreText.text = $"Score: {GameManager.Score}";
         }
 
         private void OnDestroy()
         {
-            if (_playerHealth != null)
+            if (_player != null)
             {
-                _playerHealth.OnHealthChanged -= UpdateHP;
-                _playerHealth.OnDeath -= ShowGameOver;
+                _player.OnHealthChanged -= UpdateHP;
+                _player.OnDeath -= StopTimer;
             }
+        }
 
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnScoreChanged -= UpdateScore;
-                GameManager.Instance.OnGameOver -= ShowGameOver;
-            }
+        public void StartTimer() => _running = true;
+
+        private void StopTimer() => _running = false;
+
+        private void Update()
+        {
+            if (!_running) return;
+            _elapsed += Time.deltaTime;
+            int m = (int)(_elapsed / 60);
+            int s = (int)(_elapsed % 60);
+            if (_timerText != null)
+                _timerText.text = $"{m:00}:{s:00}";
+        }
+
+        private void UpdateHP(int current, int max)
+        {
+            if (_hpText != null)
+                _hpText.text = $"HP: {current}/{max}";
         }
     }
 }
