@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -11,25 +10,51 @@ namespace Projects.MegaSuperChallengeShot.Scripts
 
         private int _score;
 
-        private void Start()
-        {
-            _scoreText.text = $"Score: {0}";
-        }
-        
         private void Awake()
         {
-            if(Instance != null)
-                Destroy(gameObject);
-            else
+            if (Instance != null && Instance != this)
             {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+        }
+
+        private void Start()
+        {
+            _score = 0;
+            _scoreText.text = $"Score: {_score}";
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
             }
         }
 
         public void AddScore()
         {
             _score++;
+            _scoreText.text = $"Score: {_score}";
+        }
+
+        public void AddScore(int amount)
+        {
+            _score += amount;
+            _scoreText.text = $"Score: {_score}";
+        }
+
+        public int GetScore()
+        {
+            return _score;
+        }
+
+        public void ResetScore()
+        {
+            _score = 0;
             _scoreText.text = $"Score: {_score}";
         }
     }
