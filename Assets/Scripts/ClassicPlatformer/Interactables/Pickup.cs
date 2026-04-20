@@ -67,21 +67,12 @@ namespace ClassicPlatformer
         private void OpenChest(Player player)
         {
             _opened = true;
-
-            // Міняємо спрайт на відкритий
             if (_spriteRenderer != null && _openSprite != null)
                 _spriteRenderer.sprite = _openSprite;
-
-            // Видаємо нагороду
             GameManager.Instance.AddCoins(_value);
-
             if (_collectEffect != null)
                 Instantiate(_collectEffect, transform.position, Quaternion.identity);
-
             Debug.Log("Chest opened!");
-
-            // Знищуємо через затримку
-            StartCoroutine(DestroyAfterDelay());
         }
 
         private IEnumerator DestroyAfterDelay()
