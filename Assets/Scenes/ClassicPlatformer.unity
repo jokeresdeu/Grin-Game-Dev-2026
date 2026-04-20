@@ -1849,7 +1849,7 @@ Transform:
   m_GameObject: {fileID: 757296884}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.008, y: 0.041, z: 0}
+  m_LocalPosition: {x: -0.5, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1931,9 +1931,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625f49f9efd5c4345b0cf0130b4edd2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClassicPlatformer.Pickup
-  _type: 0
+  _type: 2
   _value: 50
   _collectEffect: {fileID: 0}
+  _closedSprite: {fileID: 21300010, guid: ae3918a914038694d852d0bb81f62473, type: 3}
+  _openSprite: {fileID: 21300012, guid: ae3918a914038694d852d0bb81f62473, type: 3}
+  _destroyDelay: 1.5
 --- !u!61 &827773368
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3207,6 +3210,7 @@ GameObject:
   - component: {fileID: 1160114670}
   - component: {fileID: 1160114669}
   - component: {fileID: 1160114668}
+  - component: {fileID: 1160114673}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -3381,6 +3385,28 @@ Transform:
   - {fileID: 757296885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1160114673
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160114667}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c2a5b7097b0fe44394328c0bdb9252e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1178658720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5656,6 +5682,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClassicPlatformer.Lever
   _doors: {fileID: 1098925366}
+  _spriteOff: {fileID: 21300022, guid: ae3918a914038694d852d0bb81f62473, type: 3}
+  _spriteOn: {fileID: 21300024, guid: ae3918a914038694d852d0bb81f62473, type: 3}
 --- !u!61 &1921797345
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5736,6 +5764,9 @@ MonoBehaviour:
   _type: 1
   _value: 1
   _collectEffect: {fileID: 0}
+  _closedSprite: {fileID: 0}
+  _openSprite: {fileID: 0}
+  _destroyDelay: 1.5
 --- !u!70 &1964131087
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

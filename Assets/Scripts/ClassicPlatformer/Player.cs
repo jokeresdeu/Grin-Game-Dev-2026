@@ -41,6 +41,7 @@ namespace ClassicPlatformer
         public int MaxHealth => _maxHealth;
 
         private Rigidbody2D _rb;
+        private Animator _animator;
         private float _horizontalInput;
         private float _verticalMovement;
         private bool _isGrounded;
@@ -50,6 +51,7 @@ namespace ClassicPlatformer
         {
             _currentHealth = _maxHealth;
             _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
             UpdateUI();
         }
 
@@ -69,6 +71,8 @@ namespace ClassicPlatformer
                 if (_invincibilityTimer <= 0f)
                     _isInvincible = false;
             }
+
+            UpdateAnimations();
         }
 
         private void FixedUpdate()
@@ -80,6 +84,17 @@ namespace ClassicPlatformer
                 _spriteRenderer.flipX = _horizontalInput < 0;
         }
 
+        private void UpdateAnimations()
+        {
+            if (_animator == null) return;
+
+            _animator.SetInteger("AnimState", _horizontalInput != 0 ? 1 : 0);
+
+            _animator.SetBool("Grounded", _isGrounded);
+
+            _animator.SetFloat("AirSpeedY", _rb.linearVelocity.y);
+        }
+
         public void EnableVerticalMovement(bool enabled)
         {
             _rb.bodyType = enabled ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
@@ -89,6 +104,8 @@ namespace ClassicPlatformer
         private void Jump()
         {
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpForce);
+            if (_animator != null)
+                _animator.SetTrigger("Jump");
         }
 
         private void OnDrawGizmosSelected()
@@ -110,11 +127,15 @@ namespace ClassicPlatformer
 
             if (_currentHealth <= 0)
             {
+                if (_animator != null)
+                    _animator.SetTrigger("Death");
                 GameManager.Instance?.OnPlayerDied();
-                Destroy(gameObject);
+                Destroy(gameObject, 1f);
             }
             else
             {
+                if (_animator != null)
+                    _animator.SetTrigger("Hurt");
                 _isInvincible = true;
                 _invincibilityTimer = _invincibilityDuration;
             }
