@@ -1,3 +1,4 @@
+using ClassicPlatformer;
 using UnityEngine;
 
 namespace RPG
@@ -19,13 +20,23 @@ namespace RPG
         [Header("Visual")]
         [SerializeField] private Transform _playerTransform;
 
+        private int maxHealth = 100;
+        private int maxMana = 100;
+        private int _health;
+        private int _mana;
+
+        public int CurrentHealth => _health;
+        public int MaxHealth => maxHealth;
+        public int CurrentMana => _mana;
+        public int MaxMana => maxMana;
+
         private Camera _camera;
         private Vector2 _moveInput;
-        private Vector3 _clickDestination;
-        private bool _isMovingToClick;
 
         private void Awake()
         {
+            _health = maxHealth;
+            _mana = maxMana;
             _camera = Camera.main;
         }
 
@@ -44,8 +55,11 @@ namespace RPG
                 Input.GetAxisRaw("Vertical")
             );
 
-            if (_moveInput.sqrMagnitude > 0)
-                _isMovingToClick = false;
+            if (Input.GetKeyDown(KeyCode.R))
+                TakeDamage();
+
+            if (Input.GetKeyDown(KeyCode.T))
+                UseMana();
         }
 
         private void HandleClickInput()
@@ -62,12 +76,8 @@ namespace RPG
                     if (npc != null && npc.IsInRange)
                     {
                         npc.Interact();
-                        return;
                     }
                 }
-
-                _clickDestination = mouseWorld;
-                _isMovingToClick = true;
             }
         }
 
@@ -103,36 +113,26 @@ namespace RPG
 
         private void UpdateMovement()
         {
-            Vector2 movement = Vector2.zero;
+            if (_moveInput.sqrMagnitude <= 0)
+                return;
 
-            if (_moveInput.sqrMagnitude > 0)
-                movement = _moveInput.normalized;
-            else if (_isMovingToClick)
-                movement = GetClickMovement();
+            Vector2 movement = _moveInput.normalized;
 
-            if (movement.sqrMagnitude > 0 && CanMove(movement))
+            if (CanMove(movement))
                 Move(movement);
-        }
-
-        private Vector2 GetClickMovement()
-        {
-            Vector3 direction = _clickDestination - transform.position;
-
-            if (direction.magnitude <= _stopDistance)
-            {
-                _isMovingToClick = false;
-                return Vector2.zero;
-            }
-
-            return ((Vector2)direction).normalized;
         }
 
         private void Move(Vector2 direction)
         {
             transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
-
             if (direction.x != 0)
-               transform.Rotate(0, 180, 0);
+            {
+                _playerTransform.localScale = new Vector3(
+                    direction.x > 0 ? 1 : -1,
+                    1,
+                    1
+                );
+            }
         }
 
         private bool CanMove(Vector2 direction)
@@ -148,13 +148,18 @@ namespace RPG
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, _interactRange);
+        }
 
-            if (_isMovingToClick)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(transform.position, _clickDestination);
-                Gizmos.DrawWireSphere(_clickDestination, 0.2f);
-            }
+        private void UseMana()
+        {
+            _mana -= 10;
+            _mana = Mathf.Max(_mana, 0);
+        }
+
+        private void TakeDamage()
+        {
+            _health -= 10;
+            _health = Mathf.Max(_health, 0);
         }
     }
 }
