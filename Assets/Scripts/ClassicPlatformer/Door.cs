@@ -15,26 +15,33 @@ namespace ClassicPlatformer
 
         private Animator _animator;
         private bool _isOpen;
+        private bool _ready;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
         }
 
+        private void Start()
+        {
+            // Затримка щоб тригер не спрацював одразу при старті
+            Invoke(nameof(Enable), 0.5f);
+        }
+
+        private void Enable() => _ready = true;
+
         private void Update()
         {
-            if (_isOpen || _useTrigger) return;
+            if (!_ready || _isOpen || _useTrigger) return;
 
-            // OverlapCircle варіант — відкривається при наближенні
             Collider2D hit = Physics2D.OverlapCircle(transform.position, _openRadius, _playerLayer);
             if (hit != null)
                 Open();
         }
 
-        // Trigger варіант
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!_useTrigger || _isOpen) return;
+            if (!_ready || !_useTrigger || _isOpen) return;
             if (!other.TryGetComponent(out PlayerHealth _)) return;
             Open();
         }

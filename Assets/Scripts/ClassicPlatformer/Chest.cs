@@ -20,7 +20,7 @@ namespace ClassicPlatformer
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (_isOpen) return;
-            if (!other.TryGetComponent(out PlayerHealth _)) return;
+            if (!other.TryGetComponent(out Player _)) return;
 
             Open();
         }
@@ -29,7 +29,7 @@ namespace ClassicPlatformer
         {
             _isOpen = true;
             _animator.SetBool("isOpen", true);
-            GameManager.Instance.AddScore(_coinsReward);
+            GameManager.Instance?.AddScore(_coinsReward);
         }
     }
 }

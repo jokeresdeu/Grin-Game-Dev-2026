@@ -5,14 +5,29 @@ namespace ClassicPlatformer
     public class Lever : BaseInteractable
     {
         [SerializeField] private Doors _doors;
-        
-        private Player _player;
 
+        private bool _playerInRange;
+        private bool _activated;
 
-        public override void Interact(Player player)
+        private void Update()
         {
-            _doors.Open();
-            Debug.Log("Lever");
+            if (_activated || !_playerInRange) return;
+            if (Input.GetKeyDown(KeyCode.E))
+                _doors.Open();
         }
+
+        protected override void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out Player _))
+                _playerInRange = true;
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out Player _))
+                _playerInRange = false;
+        }
+
+        public override void Interact(Player player) { }
     }
 }

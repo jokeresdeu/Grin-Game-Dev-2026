@@ -59,25 +59,26 @@ namespace ClassicPlatformer
         {
             if (_isDead) return;
 
-            // Підтримка старого Health компонента
-            var health = collision.gameObject.GetComponent<Health>();
-            if (health != null)
+            bool stompedFromAbove = collision.contacts[0].normal.y < -0.5f;
+
+            if (collision.gameObject.TryGetComponent(out Player player))
             {
-                if (collision.contacts[0].normal.y < -0.5f)
-                    Die();
-                else
-                    health.TakeDamage(_damage);
+                if (stompedFromAbove) Die();
+                else player.TakeDamage(_damage);
                 return;
             }
 
-            // Підтримка нового PlayerHealth компонента
-            var playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            if (collision.gameObject.TryGetComponent(out Health health))
             {
-                if (collision.contacts[0].normal.y < -0.5f)
-                    Die();
-                else
-                    playerHealth.TakeDamage(_damage);
+                if (stompedFromAbove) Die();
+                else health.TakeDamage(_damage);
+                return;
+            }
+
+            if (collision.gameObject.TryGetComponent(out PlayerHealth playerHealth))
+            {
+                if (stompedFromAbove) Die();
+                else playerHealth.TakeDamage(_damage);
             }
         }
 

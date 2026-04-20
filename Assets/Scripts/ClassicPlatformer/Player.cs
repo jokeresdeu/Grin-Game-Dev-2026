@@ -1,9 +1,11 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 namespace ClassicPlatformer
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Animator))]
     public class Player : MonoBehaviour
     {
         [Header("Movement")]
@@ -18,7 +20,7 @@ namespace ClassicPlatformer
 
         [Header("Visual")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        
+
         [Header("Health")]
         [SerializeField] private int _maxHealth = 3;
 
@@ -31,11 +33,13 @@ namespace ClassicPlatformer
         private int _currentHealth;
         private float _invincibilityTimer;
         private bool _isInvincible;
-        
+        private bool _isDead;
+
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _maxHealth;
 
         private Rigidbody2D _rb;
+        private Animator _animator;
         private float _horizontalInput;
         private float _verticalMovement;
         private bool _isGrounded;
@@ -45,20 +49,21 @@ namespace ClassicPlatformer
         {
             _currentHealth = _maxHealth;
             _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
             UpdateUI();
         }
 
         private void Update()
         {
+            if (_isDead) return;
+
             _horizontalInput = Input.GetAxisRaw("Horizontal");
             _verticalMovement = Input.GetAxisRaw("Vertical");
-            
+
             _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
 
-            if (Input.GetButtonDown("Jump") && _isGrounded)
-            {
+            if (Input.GetButtonDown("Jump") && _isGrounded && !_verticalMovementEnabled)
                 Jump();
-            }
 
             if (_isInvincible)
             {
@@ -66,10 +71,15 @@ namespace ClassicPlatformer
                 if (_invincibilityTimer <= 0f)
                     _isInvincible = false;
             }
+
+            _animator.SetBool("isMoving", Mathf.Abs(_horizontalInput) > 0.1f || (_verticalMovementEnabled && Mathf.Abs(_verticalMovement) > 0.1f));
+            _animator.SetBool("isGrounded", _isGrounded && !_verticalMovementEnabled);
         }
 
         private void FixedUpdate()
         {
+            if (_isDead) return;
+
             float velocityY = _verticalMovementEnabled ? _verticalMovement * _climbSpeed : _rb.linearVelocity.y;
             _rb.linearVelocity = new Vector2(_horizontalInput * _moveSpeed, velocityY);
 
@@ -79,13 +89,14 @@ namespace ClassicPlatformer
 
         public void EnableVerticalMovement(bool enabled)
         {
-            _rb.bodyType = enabled ? RigidbodyType2D.Kinematic: RigidbodyType2D.Dynamic;
+            _rb.bodyType = enabled ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
             _verticalMovementEnabled = enabled;
         }
 
         private void Jump()
         {
             _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpForce);
+            _animator.SetTrigger("Jump");
         }
 
         private void OnDrawGizmosSelected()
@@ -96,8 +107,6 @@ namespace ClassicPlatformer
                 Gizmos.DrawWireSphere(_groundCheck.position, _groundCheckRadius);
             }
         }
-        
-       
 
         public void TakeDamage(int damage = 1)
         {
@@ -109,13 +118,24 @@ namespace ClassicPlatformer
 
             if (_currentHealth <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(Die());
             }
             else
             {
+                _animator.SetTrigger("Hurt");
                 _isInvincible = true;
                 _invincibilityTimer = _invincibilityDuration;
             }
+        }
+
+        private IEnumerator Die()
+        {
+            _isDead = true;
+            _rb.linearVelocity = Vector2.zero;
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+            _animator.SetTrigger("Death");
+            yield return new WaitForSeconds(1f);
+            Destroy(gameObject);
         }
 
         public void Heal(int amount = 1)

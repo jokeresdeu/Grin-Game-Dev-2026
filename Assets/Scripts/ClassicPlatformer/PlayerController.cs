@@ -9,7 +9,7 @@ namespace ClassicPlatformer
     {
         [Header("Movement")]
         [SerializeField] private float _moveSpeed = 7f;
-        [SerializeField] private float _jumpForce = 14f;
+        [SerializeField] private float _jumpForce = 100f;
 
         [Header("Ground Detection - Raycast")]
         [SerializeField] private float _raycastDistance = 0.1f;
