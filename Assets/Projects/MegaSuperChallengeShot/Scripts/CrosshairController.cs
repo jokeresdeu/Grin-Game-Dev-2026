@@ -22,6 +22,10 @@ public class CrosshairController : MonoBehaviour
     private float _lineTimer;
     private float _configuredScaleFactor = 1f;
 
+    public TMP_Text AmmoText => _text;
+    public int CurrentShots => _currentShots;
+    public int MaxShots => _maxShots;
+
     private void Start()
     {
         _main = Camera.main;
@@ -41,6 +45,11 @@ public class CrosshairController : MonoBehaviour
 
     private void Update()
     {
+        if (ChickenHuntGameplayUIController.IsPaused)
+        {
+            return;
+        }
+
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = 0f;
         Vector3 worldPosition = _main.ScreenToWorldPoint(mousePosition);
@@ -80,7 +89,7 @@ public class CrosshairController : MonoBehaviour
     private void Shoot(Vector3 worldPosition)
     {
         _currentShots--;
-        _text.text = $"{_currentShots}/{_maxShots}";
+        UpdateAmmoText();
 
         if (_crosshairAnimator != null)
         {
@@ -127,7 +136,7 @@ public class CrosshairController : MonoBehaviour
     private void SetMaxShots()
     {
         _currentShots = _maxShots;
-        _text.text = $"{_currentShots}/{_maxShots}";
+        UpdateAmmoText();
     }
 
     private void OnDestroy()
@@ -148,6 +157,19 @@ public class CrosshairController : MonoBehaviour
     private static float GetScaleFactor(Vector3 scale)
     {
         return (Mathf.Abs(scale.x) + Mathf.Abs(scale.y)) * 0.5f;
+    }
+
+    public void RefreshAmmoText()
+    {
+        UpdateAmmoText();
+    }
+
+    private void UpdateAmmoText()
+    {
+        if (_text != null)
+        {
+            _text.text = $"Ammo: {_currentShots}/{_maxShots}";
+        }
     }
 
     private List<Component> CollectHitTargets(Vector3 worldPosition, float effectiveHitRadius)

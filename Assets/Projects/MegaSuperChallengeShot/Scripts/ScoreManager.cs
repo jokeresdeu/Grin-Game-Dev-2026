@@ -7,6 +7,7 @@ namespace Projects.MegaSuperChallengeShot.Scripts
     {
         [SerializeField] private TMP_Text _scoreText;
         public static ScoreManager Instance { get; private set; }
+        public TMP_Text ScoreText => _scoreText;
 
         private int _score;
 
