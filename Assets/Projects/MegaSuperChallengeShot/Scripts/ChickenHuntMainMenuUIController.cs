@@ -34,21 +34,34 @@ namespace Projects.MegaSuperChallengeShot.Scripts
         private void Start()
         {
             ChickenHuntUiUtility.EnsureEventSystem();
-            Canvas canvas = ChickenHuntUiUtility.EnsureCanvas("MainMenuCanvas", 50);
+            Canvas canvas = ChickenHuntUiUtility.EnsureNamedCanvas("MainMenuCanvas", 50);
             BuildMainMenu(canvas.transform);
         }
 
         private void BuildMainMenu(Transform canvasTransform)
         {
-            RectTransform overlay = ChickenHuntUiUtility.CreatePanel(
-                "MainMenuOverlay",
-                canvasTransform,
-                new Color(0.03f, 0.08f, 0.05f, 0.72f),
-                Vector2.zero,
-                Vector2.one,
-                Vector2.zero,
-                Vector2.zero,
-                new Vector2(0.5f, 0.5f));
+            RectTransform overlay = ChickenHuntUiUtility.FindChildRectTransform(canvasTransform, "MainMenuOverlay");
+            if (overlay == null)
+            {
+                overlay = ChickenHuntUiUtility.CreatePanel(
+                    "MainMenuOverlay",
+                    canvasTransform,
+                    new Color(0.03f, 0.08f, 0.05f, 0.72f),
+                    Vector2.zero,
+                    Vector2.one,
+                    Vector2.zero,
+                    Vector2.zero,
+                    new Vector2(0.5f, 0.5f));
+            }
+            else
+            {
+                overlay.gameObject.SetActive(true);
+            }
+
+            if (ChickenHuntUiUtility.FindChildRectTransform(overlay, "MainMenuPanel") != null)
+            {
+                return;
+            }
 
             RectTransform panel = ChickenHuntUiUtility.CreatePanel(
                 "MainMenuPanel",
@@ -97,7 +110,7 @@ namespace Projects.MegaSuperChallengeShot.Scripts
         private void StartGame()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene(ChickenHuntScenePaths.GameplaySceneName);
+            SceneManager.LoadScene(ChickenHuntScenePaths.GameplayBuildIndex);
         }
 
         private void QuitGame()

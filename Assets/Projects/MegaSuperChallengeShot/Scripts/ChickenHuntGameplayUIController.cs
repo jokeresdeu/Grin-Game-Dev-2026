@@ -42,19 +42,35 @@ namespace Projects.MegaSuperChallengeShot.Scripts
         private void Start()
         {
             ChickenHuntUiUtility.EnsureEventSystem();
-            Canvas canvas = ChickenHuntUiUtility.EnsureCanvas("Canvas");
+            Canvas overlayCanvas = ChickenHuntUiUtility.EnsureNamedCanvas("ChickenHuntOverlayCanvas", 100);
 
             _crosshairController = Object.FindFirstObjectByType<CrosshairController>();
 
-            ConfigureHud(canvas.transform);
-            BuildPauseMenu(canvas.transform);
+            ConfigureHud();
+            BuildPauseMenu(overlayCanvas.transform);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
             {
                 SetPaused(!IsPaused);
+            }
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus && !IsPaused)
+            {
+                Cursor.visible = false;
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (!pauseStatus && !IsPaused)
+            {
+                Cursor.visible = false;
             }
         }
 
@@ -64,50 +80,12 @@ namespace Projects.MegaSuperChallengeShot.Scripts
             Cursor.visible = true;
         }
 
-        private void ConfigureHud(Transform canvasTransform)
+        private void ConfigureHud()
         {
-            ScoreManager scoreManager = Object.FindFirstObjectByType<ScoreManager>();
-            if (scoreManager != null && scoreManager.ScoreText != null)
-            {
-                ConfigureText(
-                    scoreManager.ScoreText,
-                    new Vector2(0f, 1f),
-                    new Vector2(0f, 1f),
-                    new Vector2(32f, -32f),
-                    new Vector2(320f, 60f),
-                    new Vector2(0f, 1f),
-                    32f,
-                    TextAlignmentOptions.Left);
-            }
-
             if (_crosshairController != null && _crosshairController.AmmoText != null)
             {
-                ConfigureText(
-                    _crosshairController.AmmoText,
-                    new Vector2(1f, 1f),
-                    new Vector2(1f, 1f),
-                    new Vector2(-32f, -32f),
-                    new Vector2(320f, 60f),
-                    new Vector2(1f, 1f),
-                    32f,
-                    TextAlignmentOptions.Right);
-
                 _crosshairController.RefreshAmmoText();
             }
-
-            ChickenHuntUiUtility.CreateText(
-                "ControlsHint",
-                canvasTransform,
-                "LMB Shoot    RMB Reload    Esc Pause",
-                24f,
-                TextAlignmentOptions.Left,
-                new Vector2(0f, 0f),
-                new Vector2(0f, 0f),
-                new Vector2(32f, 32f),
-                new Vector2(520f, 40f),
-                new Vector2(0f, 0f),
-                FontStyles.Normal,
-                new Color(1f, 1f, 1f, 0.9f));
         }
 
         private void BuildPauseMenu(Transform canvasTransform)
@@ -159,24 +137,6 @@ namespace Projects.MegaSuperChallengeShot.Scripts
             _pauseMenuRoot.SetActive(false);
         }
 
-        private static void ConfigureText(
-            TMP_Text text,
-            Vector2 anchorMin,
-            Vector2 anchorMax,
-            Vector2 anchoredPosition,
-            Vector2 sizeDelta,
-            Vector2 pivot,
-            float fontSize,
-            TextAlignmentOptions alignment)
-        {
-            RectTransform rectTransform = text.rectTransform;
-            ChickenHuntUiUtility.SetRect(rectTransform, anchorMin, anchorMax, anchoredPosition, sizeDelta, pivot);
-            text.fontSize = fontSize;
-            text.alignment = alignment;
-            text.fontStyle = FontStyles.Bold;
-            text.raycastTarget = false;
-        }
-
         private void SetPaused(bool paused)
         {
             if (_pauseMenuRoot == null || IsPaused == paused)
@@ -212,13 +172,13 @@ namespace Projects.MegaSuperChallengeShot.Scripts
         private void RestartScene()
         {
             ResumeTime();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void LoadMainMenu()
         {
             ResumeTime();
-            SceneManager.LoadScene(ChickenHuntScenePaths.MainMenuSceneName);
+            SceneManager.LoadScene(ChickenHuntScenePaths.MainMenuBuildIndex);
         }
 
         private void QuitGame()

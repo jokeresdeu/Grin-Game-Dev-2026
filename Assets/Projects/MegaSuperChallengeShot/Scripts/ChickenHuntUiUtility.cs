@@ -7,6 +7,8 @@ namespace Projects.MegaSuperChallengeShot.Scripts
 {
     public static class ChickenHuntScenePaths
     {
+        public const int MainMenuBuildIndex = 0;
+        public const int GameplayBuildIndex = 1;
         public const string GameplayScenePath = "Assets/lab4.unity";
         public const string GameplaySceneName = "lab4";
         public const string MainMenuScenePath = "Assets/Projects/MegaSuperChallengeShot/Scenes/MainMenu.unity";
@@ -34,30 +36,49 @@ namespace Projects.MegaSuperChallengeShot.Scripts
             Canvas canvas = Object.FindFirstObjectByType<Canvas>();
             if (canvas == null)
             {
-                GameObject canvasObject = new(name, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-                canvas = canvasObject.GetComponent<Canvas>();
+                canvas = EnsureNamedCanvas(name, sortingOrder);
             }
 
+            return canvas;
+        }
+
+        public static Canvas EnsureNamedCanvas(string name, int sortingOrder = 0)
+        {
+            Canvas[] canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                if (canvases[i].name == name)
+                {
+                    return canvases[i];
+                }
+            }
+
+            GameObject canvasObject = new(name, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+            Canvas canvas = canvasObject.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = sortingOrder;
 
             CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
-            if (scaler == null)
-            {
-                scaler = canvas.gameObject.AddComponent<CanvasScaler>();
-            }
-
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920f, 1080f);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
 
-            if (canvas.GetComponent<GraphicRaycaster>() == null)
+            return canvas;
+        }
+
+        public static RectTransform FindChildRectTransform(Transform parent, string name)
+        {
+            for (int i = 0; i < parent.childCount; i++)
             {
-                canvas.gameObject.AddComponent<GraphicRaycaster>();
+                Transform child = parent.GetChild(i);
+                if (child.name == name)
+                {
+                    return child as RectTransform;
+                }
             }
 
-            return canvas;
+            return null;
         }
 
         public static RectTransform CreatePanel(
@@ -108,7 +129,7 @@ namespace Projects.MegaSuperChallengeShot.Scripts
             text.fontStyle = fontStyle;
             text.color = color ?? Color.white;
             text.raycastTarget = false;
-            text.enableWordWrapping = true;
+            text.textWrappingMode = TextWrappingModes.Normal;
             text.overflowMode = TextOverflowModes.Overflow;
 
             return text;
