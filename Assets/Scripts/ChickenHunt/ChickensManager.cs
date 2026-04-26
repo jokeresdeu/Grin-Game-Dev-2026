@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // ДОДАНО: Бібліотека для перезапуску сцени
 
 namespace ChickenHunt
 {
@@ -19,10 +20,15 @@ namespace ChickenHunt
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _livesText; // ДОДАНО: Текст для Життів
+
+        [Header("Game Rules")]
+        [SerializeField] private int _maxLives = 3; // ДОДАНО: Максимум життів
 
         private readonly List<Chicken> _activeChickens = new();
         private float _spawnTimer;
         private int _score;
+        private int _currentLives; // Поточні життя
         private bool _isSpawning;
 
         private void Start()
@@ -66,6 +72,9 @@ namespace ChickenHunt
                     chicken.OnDeath -= OnChickenDeath;
                     _activeChickens.RemoveAt(i);
                     Destroy(chicken.gameObject);
+                    
+                    // МЕХАНІКА: Курка втекла = мінус життя
+                    LoseLife();
                 }
             }
         }
@@ -75,7 +84,9 @@ namespace ChickenHunt
             _isSpawning = true;
             _spawnTimer = 0f;
             _score = 0;
+            _currentLives = _maxLives; // Відновлюємо життя на старті
             UpdateScoreUI();
+            UpdateLivesUI();
         }
 
         public void StopSpawning()
@@ -109,10 +120,30 @@ namespace ChickenHunt
             UpdateScoreUI();
         }
 
+        // НОВА МЕХАНІКА: Втрата життя і перезапуск сцени
+        private void LoseLife()
+        {
+            _currentLives--;
+            UpdateLivesUI();
+
+            if (_currentLives <= 0)
+            {
+                Debug.Log("Гру закінчено! Перезапуск...");
+                // Перезавантажуємо поточну сцену
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+
         private void UpdateScoreUI()
         {
             if (_scoreText != null)
-                _scoreText.text = $"Score: {_score}";
+                _scoreText.text = $"Очки: {_score}";
+        }
+
+        private void UpdateLivesUI()
+        {
+            if (_livesText != null)
+                _livesText.text = $"Життя: {_currentLives}";
         }
 
         private void OnDestroy()
