@@ -23,7 +23,8 @@ namespace ChickenHunt
         [SerializeField] private GameObject _losePanel; 
         [SerializeField] private int _maxLives = 3;      
         
-        // ДОДАНО: Посилання на аніматор тексту очок
+        [SerializeField] private HealthUI _healthUI; 
+
         [SerializeField] private Animator _scoreTextAnimator;
 
         private readonly List<Chicken> _activeChickens = new();
@@ -36,6 +37,8 @@ namespace ChickenHunt
         {
             _currentLives = _maxLives; 
             _losePanel.SetActive(false); 
+            
+            UpdateScoreUI();
             StartSpawning();
         }
 
@@ -149,13 +152,17 @@ namespace ChickenHunt
         {
             if (_scoreText != null)
             {
-                _scoreText.text = $"Score: {_score} | HP: {_currentLives}";
+                _scoreText.text = $"Score: {_score}";
                 
-                // ДОДАНО: Запуск анімації підстрибування тексту
                 if (_scoreTextAnimator != null)
                 {
                     _scoreTextAnimator.SetTrigger("Pop");
                 }
+            }
+
+            if (_healthUI != null)
+            {
+                _healthUI.UpdateHealth(_currentLives);
             }
         }
 
