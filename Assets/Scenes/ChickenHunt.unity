@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 247962528}
   - component: {fileID: 247962527}
   - component: {fileID: 247962526}
+  - component: {fileID: 247962529}
   m_Layer: 5
   m_Name: RestartButton
   m_TagString: Untagged
@@ -544,6 +545,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247962524}
   m_CullTransparentMesh: 1
+--- !u!95 &247962529
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247962524}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5c2144695c949a540937f659b3d4ba5f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &314919019
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +978,7 @@ GameObject:
   - component: {fileID: 524116338}
   - component: {fileID: 524116337}
   - component: {fileID: 524116336}
+  - component: {fileID: 524116339}
   m_Layer: 5
   m_Name: LosePanel
   m_TagString: Untagged
@@ -1021,6 +1045,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &524116339
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524116335}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9d17151de2d577649829ad803652dbfc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &566002863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1987,6 +2033,7 @@ MonoBehaviour:
   _scoreText: {fileID: 1706042857}
   _losePanel: {fileID: 524116335}
   _maxLives: 3
+  _scoreTextAnimator: {fileID: 1706042859}
 --- !u!4 &1461270493
 Transform:
   m_ObjectHideFlags: 0
@@ -2215,6 +2262,7 @@ GameObject:
   - component: {fileID: 1706042856}
   - component: {fileID: 1706042858}
   - component: {fileID: 1706042857}
+  - component: {fileID: 1706042859}
   m_Layer: 5
   m_Name: Points
   m_TagString: Untagged
@@ -2341,6 +2389,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706042855}
   m_CullTransparentMesh: 1
+--- !u!95 &1706042859
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706042855}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db618518c31509c44b718de0f68aff0d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1926531105
 PrefabInstance:
   m_ObjectHideFlags: 0

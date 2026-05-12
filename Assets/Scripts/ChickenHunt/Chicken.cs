@@ -15,12 +15,23 @@ namespace ChickenHunt
         
         [Header("Visual")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        // ДОДАНО: Посилання на аніматор
+        [SerializeField] private Animator _animator;
 
         private Vector2 _moveDirection;
         private Vector2 _baseDirection;
         private float _speed;
+        // ДОДАНО: Прапорець, щоб пташка не реагувала на постріли під час анімації смерті
+        private bool _isDead;
      
         public event Action<int> OnDeath;
+
+        // ДОДАНО: Автоматичне отримання аніматору, якщо він не призначений в інспекторі
+        private void Awake()
+        {
+            if (_animator == null)
+                _animator = GetComponent<Animator>();
+        }
 
         public void Initialize(Vector2 flyDirection)
         {
@@ -37,17 +48,33 @@ namespace ChickenHunt
 
         private void Update()
         {
-            Fly();
+            // Пташка летить тільки якщо вона ще жива
+            if (!_isDead)
+            {
+                Fly();
+            }
         }
 
         private void Fly()
         {
             transform.Translate(_moveDirection * _speed * Time.deltaTime);
         }
+
         public void OnShoot()
         {
+            if (_isDead) return;
+
+            _isDead = true;
             OnDeath?.Invoke(_points);
-            Destroy(gameObject);
+
+            // ЗАПУСК АНІМАЦІЇ:
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Die"); // Викликаємо тригер, що створили в Animator
+            }
+
+            // ЗНИЩЕННЯ:
+            Destroy(gameObject, 0.3f); 
         }
     }
 }

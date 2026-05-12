@@ -20,19 +20,22 @@ namespace ChickenHunt
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _scoreText;
-        [SerializeField] private GameObject _losePanel; // Панель програшу
-        [SerializeField] private int _maxLives = 3;      // Початкова кількість життів
+        [SerializeField] private GameObject _losePanel; 
+        [SerializeField] private int _maxLives = 3;      
+        
+        // ДОДАНО: Посилання на аніматор тексту очок
+        [SerializeField] private Animator _scoreTextAnimator;
 
         private readonly List<Chicken> _activeChickens = new();
         private float _spawnTimer;
         private int _score;
-        private int _currentLives; // Поточні життя
+        private int _currentLives; 
         private bool _isSpawning;
 
         private void Start()
         {
-            _currentLives = _maxLives; // Ініціалізація життів
-            _losePanel.SetActive(false); // Ховаємо панель при старті
+            _currentLives = _maxLives; 
+            _losePanel.SetActive(false); 
             StartSpawning();
         }
 
@@ -73,13 +76,11 @@ namespace ChickenHunt
                     _activeChickens.RemoveAt(i);
                     Destroy(chicken.gameObject);
                     
-                    // ДОДАНО: Віднімаємо життя, якщо курка втекла
                     RemoveLife();
                 }
             }
         }
 
-        // ДОДАНО: Метод для віднімання життя
         private void RemoveLife()
         {
             _currentLives--;
@@ -95,10 +96,10 @@ namespace ChickenHunt
         {
             StopSpawning();
             _losePanel.SetActive(true);
-            Time.timeScale = 0f; // Зупиняємо гру
+
+            Time.timeScale = 0f; 
         }
 
-        // ДОДАНО: Метод для кнопки перезапуску
         public void RestartGame()
         {
             Time.timeScale = 1f;
@@ -147,7 +148,15 @@ namespace ChickenHunt
         private void UpdateScoreUI()
         {
             if (_scoreText != null)
+            {
                 _scoreText.text = $"Score: {_score} | HP: {_currentLives}";
+                
+                // ДОДАНО: Запуск анімації підстрибування тексту
+                if (_scoreTextAnimator != null)
+                {
+                    _scoreTextAnimator.SetTrigger("Pop");
+                }
+            }
         }
 
         private void OnDestroy()
