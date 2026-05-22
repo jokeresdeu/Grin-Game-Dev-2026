@@ -5,7 +5,7 @@ namespace ChickenHunt
 {
     public class Chest : MonoBehaviour, IShootable
     {
-        public void OnShoot()
+        public void OnShoot(int damage)
         {
             Debug.LogError("You shot chest");
             Destroy(gameObject);
