@@ -1,0 +1,170 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace ClassicPlatformer
+{
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class Player : MonoBehaviour
+    {
+        [Header("Movement")]
+        [SerializeField] private float _moveSpeed = 7f;
+        [SerializeField] private float _climbSpeed = 3.5f;
+        [SerializeField] private float _jumpForce = 14f;
+
+        [Header("Ground Detection")]
+        [SerializeField] private Transform _groundCheck;
+        [SerializeField] private float _groundCheckRadius = 0.2f;
+        [SerializeField] private LayerMask _groundLayer;
+
+        [Header("Visual")]
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+
+        [Header("Health")]
+        [SerializeField] private int _maxHealth = 3;
+
+        [Header("Invincibility")]
+        [SerializeField] private float _invincibilityDuration = 1.5f;
+
+        [Header("UI")]
+        [SerializeField] private TextMeshProUGUI _healthText;
+        [SerializeField] private Slider _healthSlider;
+        [SerializeField] private Image _healthFillImage;
+        [SerializeField] private Color _healthColorFull = Color.green;
+        [SerializeField] private Color _healthColorLow = Color.red;
+
+        private int _currentHealth;
+        private float _invincibilityTimer;
+        private bool _isInvincible;
+
+        public int CurrentHealth => _currentHealth;
+        public int MaxHealth => _maxHealth;
+
+        private Rigidbody2D _rb;
+        private Animator _animator;
+        private float _horizontalInput;
+        private float _verticalMovement;
+        private bool _isGrounded;
+        private bool _verticalMovementEnabled;
+
+        private void Awake()
+        {
+            _currentHealth = _maxHealth;
+            _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
+            UpdateUI();
+        }
+
+        private void Update()
+        {
+            _horizontalInput = Input.GetAxisRaw("Horizontal");
+            _verticalMovement = Input.GetAxisRaw("Vertical");
+
+            _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+
+            if (Input.GetButtonDown("Jump") && _isGrounded)
+                Jump();
+
+            if (_isInvincible)
+            {
+                _invincibilityTimer -= Time.deltaTime;
+                if (_invincibilityTimer <= 0f)
+                    _isInvincible = false;
+            }
+
+            UpdateAnimations();
+        }
+
+        private void FixedUpdate()
+        {
+            float velocityY = _verticalMovementEnabled ? _verticalMovement * _climbSpeed : _rb.linearVelocity.y;
+            _rb.linearVelocity = new Vector2(_horizontalInput * _moveSpeed, velocityY);
+
+            if (_spriteRenderer != null && _horizontalInput != 0)
+                _spriteRenderer.flipX = _horizontalInput < 0;
+        }
+
+        private void UpdateAnimations()
+        {
+            if (_animator == null) return;
+
+            _animator.SetInteger("AnimState", _horizontalInput != 0 ? 1 : 0);
+
+            _animator.SetBool("Grounded", _isGrounded);
+
+            _animator.SetFloat("AirSpeedY", _rb.linearVelocity.y);
+        }
+
+        public void EnableVerticalMovement(bool enabled)
+        {
+            _rb.bodyType = enabled ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
+            _verticalMovementEnabled = enabled;
+        }
+
+        private void Jump()
+        {
+            _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _jumpForce);
+            if (_animator != null)
+                _animator.SetTrigger("Jump");
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (_groundCheck != null)
+            {
+                Gizmos.color = _isGrounded ? Color.green : Color.red;
+                Gizmos.DrawWireSphere(_groundCheck.position, _groundCheckRadius);
+            }
+        }
+
+        public void TakeDamage(int damage = 1)
+        {
+            if (_isInvincible || _currentHealth <= 0) return;
+
+            _currentHealth -= damage;
+            _currentHealth = Mathf.Max(_currentHealth, 0);
+            UpdateUI();
+
+            if (_currentHealth <= 0)
+            {
+                if (_animator != null)
+                    _animator.SetTrigger("Death");
+                GameManager.Instance?.OnPlayerDied();
+                Destroy(gameObject, 1f);
+            }
+            else
+            {
+                if (_animator != null)
+                    _animator.SetTrigger("Hurt");
+                _isInvincible = true;
+                _invincibilityTimer = _invincibilityDuration;
+            }
+        }
+
+        public void Heal(int amount = 1)
+        {
+            if (_currentHealth <= 0) return;
+
+            _currentHealth += amount;
+            _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            float ratio = (float)_currentHealth / _maxHealth;
+
+            if (_healthText != null)
+                _healthText.text = $"HP: {_currentHealth}/{_maxHealth}";
+
+            if (_healthSlider != null)
+            {
+                _healthSlider.maxValue = _maxHealth;
+                _healthSlider.value = _currentHealth;
+            }
+
+            if (_healthFillImage != null)
+                _healthFillImage.color = Color.Lerp(_healthColorLow, _healthColorFull, ratio);
+        }
+    }
+}
