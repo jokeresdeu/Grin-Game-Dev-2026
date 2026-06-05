@@ -12,14 +12,16 @@ namespace ChickenHunt
         [Header("Movement")]
         [SerializeField] private float _minSpeed = 2f;
         [SerializeField] private float _maxSpeed = 5f;
-        
+
         [Header("Visual")]
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private Animator _animator;
 
         private Vector2 _moveDirection;
         private Vector2 _baseDirection;
         private float _speed;
-     
+        private bool _isDead = false;
+
         public event Action<int> OnDeath;
 
         public void Initialize(Vector2 flyDirection)
@@ -37,17 +39,33 @@ namespace ChickenHunt
 
         private void Update()
         {
-            Fly();
+            if (!_isDead)
+            {
+                Fly();
+            }
         }
 
         private void Fly()
         {
             transform.Translate(_moveDirection * _speed * Time.deltaTime);
         }
+
         public void OnShoot()
         {
+            if (_isDead) return;
+            _isDead = true;
+
             OnDeath?.Invoke(_points);
-            Destroy(gameObject);
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Die");
+                Destroy(gameObject, 0.5f);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
