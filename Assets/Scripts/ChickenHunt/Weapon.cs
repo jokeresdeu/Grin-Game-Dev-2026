@@ -17,6 +17,9 @@ namespace ChickenHunt
         [SerializeField] private TextMeshProUGUI _ammoText;
         [SerializeField] private GameObject _reloadingIndicator;
 
+        [Header("Super Attack (Lab 3)")]
+        [SerializeField] private float _explosionRadius = 4f;
+
         private Camera _camera;
         private int _currentAmmo;
         private float _reloadTimer;
@@ -62,9 +65,16 @@ namespace ChickenHunt
 
         private void HandleInput()
         {
+            // ЛКМ — Звичайна стрільба
             if (Input.GetMouseButtonDown(0))
             {
                 TryShoot();
+            }
+
+            // МЕХАНІКА 4: ПКМ — Супер-вибух (витрачає 3 патрони)
+            if (Input.GetMouseButtonDown(1))
+            {
+                TrySuperShoot();
             }
 
             if (Input.GetKeyDown(KeyCode.R))
@@ -106,11 +116,38 @@ namespace ChickenHunt
                 StartReload();
             }
         }
-        
+
+        private void TrySuperShoot()
+        {
+            // Перевіряємо, чи є хоча б 3 патрони і чи не перезаряджаємось
+            if (_isReloading || _currentAmmo < 3) return;
+
+            _currentAmmo -= 3;
+            UpdateAmmoUI();
+
+            Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = 0f;
+
+            // МЕХАНІКА ВЗАЄМОДІЇ ПО РАДІУСУ: Отримуємо всі об'єкти в зоні колом
+            Collider2D[] hits = Physics2D.OverlapCircleAll(mouseWorld, _explosionRadius);
+
+            foreach (var hit in hits)
+            {
+                if (hit.TryGetComponent(out IShootable target))
+                {
+                    target.OnShoot(); // Підриваємо курку чи скриню
+                }
+            }
+
+            if (_currentAmmo <= 0)
+            {
+                StartReload();
+            }
+        }
+
         private void TryReload()
         {
             if (_isReloading || _currentAmmo == _maxAmmo) return;
-
             StartReload();
         }
 
@@ -118,7 +155,7 @@ namespace ChickenHunt
         {
             _isReloading = true;
             _reloadTimer = _reloadTime;
-            
+
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(true);
         }
@@ -128,7 +165,7 @@ namespace ChickenHunt
             _isReloading = false;
             _currentAmmo = _maxAmmo;
             UpdateAmmoUI();
-            
+
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(false);
         }
@@ -137,6 +174,15 @@ namespace ChickenHunt
         {
             if (_ammoText != null)
                 _ammoText.text = $"{_currentAmmo}/{_maxAmmo}";
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (_camera == null) return;
+            Gizmos.color = Color.red;
+            Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = 0f;
+            Gizmos.DrawWireSphere(mouseWorld, _explosionRadius);
         }
     }
 }
