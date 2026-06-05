@@ -26,6 +26,7 @@ namespace ChickenHunt
         [SerializeField] private Slider _hpSlider;
         [SerializeField] private TextMeshProUGUI _hpText;
         [SerializeField] private GameObject _losePanel;
+        [SerializeField] private GameObject _crosshairObject; // Посилання на об'єкт прицілу (Crosshair_01)
 
         [Header("Health Kit Settings")]
         [SerializeField] private GameObject _healthKitPrefab;
@@ -36,6 +37,7 @@ namespace ChickenHunt
         private int _score;
         private bool _isSpawning;
         private int _currentLives = 5;
+        private bool _isGameOver = false; // Запобіжник від спаму при програші
 
         private void Awake()
         {
@@ -52,7 +54,7 @@ namespace ChickenHunt
 
         private void Update()
         {
-            if (!_isSpawning) return;
+            if (!_isSpawning || _isGameOver) return;
 
             UpdateSpawning();
             UpdateHealthKitSpawn();
@@ -62,6 +64,8 @@ namespace ChickenHunt
         private void InitUI()
         {
             _currentLives = 5;
+            _isGameOver = false; // Скидаємо прапорець при старті
+
             if (_hpSlider != null)
             {
                 _hpSlider.maxValue = 5;
@@ -113,6 +117,8 @@ namespace ChickenHunt
 
         private void CheckOutOfBounds()
         {
+            if (_isGameOver) return;
+
             for (int i = _activeChickens.Count - 1; i >= 0; i--)
             {
                 var chicken = _activeChickens[i];
@@ -136,6 +142,8 @@ namespace ChickenHunt
 
         private void TakeDamage()
         {
+            if (_isGameOver) return;
+
             _currentLives--;
             if (_hpSlider != null) _hpSlider.value = _currentLives;
             UpdateHpUI();
@@ -148,7 +156,7 @@ namespace ChickenHunt
 
         public void AddLife()
         {
-            if (_currentLives < 5)
+            if (_currentLives < 5 && !_isGameOver)
             {
                 _currentLives++;
                 if (_hpSlider != null) _hpSlider.value = _currentLives;
@@ -158,13 +166,31 @@ namespace ChickenHunt
 
         private void TriggerGameOver()
         {
+            if (_isGameOver) return;
+            _isGameOver = true;
             _isSpawning = false;
-            Time.timeScale = 0f;
-            if (_losePanel != null) _losePanel.SetActive(true);
+
+            Time.timeScale = 0f; // Зупиняємо фізику та час гри
+
+            if (_losePanel != null)
+            {
+                _losePanel.SetActive(true);
+            }
+
+            // ВИМИКАЄМО ПРИЦІЛ ПРИ ПОРАЗЦІ, щоб повернути контроль над мишкою
+            if (_crosshairObject != null)
+            {
+                _crosshairObject.SetActive(false);
+            }
+
+            // Звільняємо курсор для кліків по кнопках поразки
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public void RestartGame()
         {
+            Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
@@ -201,6 +227,8 @@ namespace ChickenHunt
 
         private void OnChickenDeath(int points)
         {
+            if (_isGameOver) return;
+
             _score += points;
             UpdateScoreUI();
             _activeChickens.RemoveAll(c => c == null || !c.gameObject.activeInHierarchy);
