@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UkraineVsZombies
 {
@@ -18,11 +21,19 @@ namespace UkraineVsZombies
 
         [Header("UI")]
         [SerializeField] private GameObject _gameOverPanel;
+        [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _baseHealthText;
+        [SerializeField] private Slider _baseHealthSlider;
+
+        [Header("Base")]
+        [SerializeField] private int _baseMaxHealth = 5;
 
         private readonly Dictionary<int, List<Enemy>> _enemiesByLane = new();
         private readonly Dictionary<int, List<Tower>> _towersByLane = new();
         private float _spawnTimer;
         private bool _isGameOver;
+        private int _score;
+        private int _baseHealth;
 
         public static GameManager Instance { get; private set; }
 
@@ -41,6 +52,10 @@ namespace UkraineVsZombies
         {
             if (_gameOverPanel != null)
                 _gameOverPanel.SetActive(false);
+
+            _baseHealth = _baseMaxHealth;
+            _score = 0;
+            UpdateUI();
 
             _spawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
         }
@@ -153,6 +168,45 @@ namespace UkraineVsZombies
 
             if (_gameOverPanel != null)
                 _gameOverPanel.SetActive(true);
+        }
+
+        public void AddScore(int amount)
+        {
+            if (_isGameOver) return;
+
+            _score += amount;
+            UpdateUI();
+        }
+
+        public void DamageBase(int damage)
+        {
+            if (_isGameOver) return;
+
+            _baseHealth -= damage;
+            _baseHealth = Mathf.Max(0, _baseHealth);
+            UpdateUI();
+
+            if (_baseHealth <= 0)
+            {
+                GameOver();
+            }
+        }
+
+        public void RestartScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private void UpdateUI()
+        {
+            if (_scoreText != null)
+                _scoreText.text = "Score: " + _score;
+
+            if (_baseHealthText != null)
+                _baseHealthText.text = "Base HP: " + _baseHealth + "/" + _baseMaxHealth;
+
+            if (_baseHealthSlider != null)
+                _baseHealthSlider.value = _baseMaxHealth > 0 ? (float)_baseHealth / _baseMaxHealth : 0f;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace UkraineVsZombies
         [SerializeField] private float _range = 5f;
         [SerializeField] private float _fireRate = 1f;
         [SerializeField] private float _damage = 10f;
+        [SerializeField] private LayerMask _enemyLayerMask = -1;
 
         [Header("Projectile")]
         [SerializeField] private GameObject _projectilePrefab;
@@ -37,6 +38,7 @@ namespace UkraineVsZombies
         private void Update()
         {
             if (!IsAlive) return;
+            FindTargetWithOverlap();
             TryFire();
         }
 
@@ -70,6 +72,33 @@ namespace UkraineVsZombies
             }
         }
 
+        private void FindTargetWithOverlap()
+        {
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _range, _enemyLayerMask);
+            Enemy bestTarget = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var hit in hits)
+            {
+                Enemy enemy = hit.GetComponent<Enemy>();
+                if (enemy == null || !enemy.IsAlive) continue;
+
+                float distanceX = enemy.transform.position.x - transform.position.x;
+                if (distanceX <= 0f || distanceX > _range) continue;
+
+                if (distanceX < closestDistance)
+                {
+                    closestDistance = distanceX;
+                    bestTarget = enemy;
+                }
+            }
+
+            if (bestTarget != null)
+            {
+                _target = bestTarget;
+            }
+        }
+
         public void TakeDamage(float damage)
         {
             if (!IsAlive) return;
@@ -93,6 +122,7 @@ namespace UkraineVsZombies
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + Vector3.right * _range);
+            Gizmos.DrawWireSphere(transform.position, _range);
         }
     }
 }

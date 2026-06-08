@@ -11,6 +11,8 @@ namespace UkraineVsZombies
         [SerializeField] private float _moveSpeed = 2f;
         [SerializeField] private float _attackDamage = 10f;
         [SerializeField] private float _attackRate = 1f;
+        [SerializeField] private int _scoreReward = 1;
+        [SerializeField] private int _baseDamage = 1;
 
         [Header("HP Bar")]
         [SerializeField] private Slider _hpSlider;
@@ -44,6 +46,9 @@ namespace UkraineVsZombies
 
             if (transform.position.x < -10f)
             {
+                if (GameManager.Instance != null)
+                    GameManager.Instance.DamageBase(_baseDamage);
+
                 OnDeath?.Invoke();
                 Destroy(gameObject);
             }
@@ -68,6 +73,9 @@ namespace UkraineVsZombies
 
             if (_currentHealth <= 0f)
             {
+                if (GameManager.Instance != null)
+                    GameManager.Instance.AddScore(_scoreReward);
+
                 OnDeath?.Invoke();
                 Destroy(gameObject);
             }
