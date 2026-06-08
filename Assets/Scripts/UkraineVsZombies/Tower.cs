@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,9 +21,22 @@ namespace UkraineVsZombies
         [Header("HP Bar")]
         [SerializeField] private Slider _hpSlider;
 
+        [Header("Animation")]
+        [SerializeField] private float _idlePulseAmount = 0.04f;
+        [SerializeField] private float _idlePulseSpeed = 4f;
+        [SerializeField] private float _recoilDistance = 0.12f;
+        [SerializeField] private float _recoilTime = 0.08f;
+        [SerializeField] private float _damageFlashTime = 0.12f;
+
         private float _currentHealth;
         private float _fireTimer;
         private Enemy _target;
+        private SpriteRenderer _spriteRenderer;
+        private Vector3 _startScale;
+        private Vector3 _startPosition;
+        private Color _startColor = Color.white;
+        private Coroutine _recoilRoutine;
+        private Coroutine _damageFlashRoutine;
         public bool IsAlive => _currentHealth > 0;
         public float Range => _range;
 
@@ -31,6 +45,13 @@ namespace UkraineVsZombies
             if (_firePoint == null)
                 _firePoint = transform;
 
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            _startScale = transform.localScale;
+            _startPosition = transform.localPosition;
+
+            if (_spriteRenderer != null)
+                _startColor = _spriteRenderer.color;
+
             _currentHealth = _maxHealth;
             UpdateHpBar();
         }
@@ -38,6 +59,8 @@ namespace UkraineVsZombies
         private void Update()
         {
             if (!IsAlive) return;
+
+            AnimateIdle();
             FindTargetWithOverlap();
             TryFire();
         }
@@ -59,6 +82,8 @@ namespace UkraineVsZombies
 
         private void Fire()
         {
+            PlayRecoil();
+
             if (_projectilePrefab != null)
             {
                 var obj = Instantiate(_projectilePrefab, _firePoint.position, Quaternion.identity);
@@ -108,8 +133,78 @@ namespace UkraineVsZombies
 
             if (_currentHealth <= 0f)
             {
-                Destroy(gameObject);
+                StartCoroutine(PlayDeathAnimation());
             }
+            else
+            {
+                if (_damageFlashRoutine != null)
+                    StopCoroutine(_damageFlashRoutine);
+
+                _damageFlashRoutine = StartCoroutine(PlayDamageFlash());
+            }
+        }
+
+        private void AnimateIdle()
+        {
+            float pulse = Mathf.Sin(Time.time * _idlePulseSpeed) * _idlePulseAmount;
+            transform.localScale = new Vector3(_startScale.x + pulse, _startScale.y + pulse, _startScale.z);
+        }
+
+        private void PlayRecoil()
+        {
+            if (_recoilRoutine != null)
+                StopCoroutine(_recoilRoutine);
+
+            _recoilRoutine = StartCoroutine(PlayRecoilAnimation());
+        }
+
+        private IEnumerator PlayRecoilAnimation()
+        {
+            Vector3 recoilPosition = _startPosition + Vector3.left * _recoilDistance;
+            transform.localPosition = recoilPosition;
+
+            float timer = 0f;
+            while (timer < _recoilTime)
+            {
+                timer += Time.deltaTime;
+                float t = timer / _recoilTime;
+                transform.localPosition = Vector3.Lerp(recoilPosition, _startPosition, t);
+                yield return null;
+            }
+
+            transform.localPosition = _startPosition;
+        }
+
+        private IEnumerator PlayDamageFlash()
+        {
+            if (_spriteRenderer != null)
+                _spriteRenderer.color = Color.red;
+
+            yield return new WaitForSeconds(_damageFlashTime);
+
+            if (_spriteRenderer != null)
+                _spriteRenderer.color = _startColor;
+        }
+
+        private IEnumerator PlayDeathAnimation()
+        {
+            _currentHealth = 0f;
+            float timer = 0f;
+            Vector3 fromScale = transform.localScale;
+
+            while (timer < 0.2f)
+            {
+                timer += Time.deltaTime;
+                float t = timer / 0.2f;
+                transform.localScale = Vector3.Lerp(fromScale, Vector3.zero, t);
+
+                if (_spriteRenderer != null)
+                    _spriteRenderer.color = Color.Lerp(_startColor, Color.clear, t);
+
+                yield return null;
+            }
+
+            Destroy(gameObject);
         }
 
         private void UpdateHpBar()

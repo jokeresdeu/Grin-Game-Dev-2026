@@ -172,7 +172,13 @@ MonoBehaviour:
   _moveSpeed: 2
   _attackDamage: 10
   _attackRate: 1
+  _scoreReward: 1
+  _baseDamage: 1
   _hpSlider: {fileID: 3502935079855447380}
+  _moveBobAmount: 0.08
+  _moveBobSpeed: 8
+  _damageFlashTime: 0.12
+  _deathAnimationTime: 0.25
 --- !u!1 &3501809628440410240
 GameObject:
   m_ObjectHideFlags: 0

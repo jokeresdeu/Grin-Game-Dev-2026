@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,12 +29,19 @@ namespace UkraineVsZombies
         [Header("Base")]
         [SerializeField] private int _baseMaxHealth = 5;
 
+        [Header("UI Animation")]
+        [SerializeField] private float _uiPunchScale = 1.2f;
+        [SerializeField] private float _uiPunchTime = 0.12f;
+        [SerializeField] private float _gameOverPopTime = 0.25f;
+
         private readonly Dictionary<int, List<Enemy>> _enemiesByLane = new();
         private readonly Dictionary<int, List<Tower>> _towersByLane = new();
         private float _spawnTimer;
         private bool _isGameOver;
         private int _score;
         private int _baseHealth;
+        private Coroutine _scorePunchRoutine;
+        private Coroutine _basePunchRoutine;
 
         public static GameManager Instance { get; private set; }
 
@@ -168,6 +176,9 @@ namespace UkraineVsZombies
 
             if (_gameOverPanel != null)
                 _gameOverPanel.SetActive(true);
+
+            if (_gameOverPanel != null)
+                StartCoroutine(PlayGameOverAnimation());
         }
 
         public void AddScore(int amount)
@@ -176,6 +187,7 @@ namespace UkraineVsZombies
 
             _score += amount;
             UpdateUI();
+            PlayTextPunch(_scoreText, ref _scorePunchRoutine, Color.yellow);
         }
 
         public void DamageBase(int damage)
@@ -185,6 +197,7 @@ namespace UkraineVsZombies
             _baseHealth -= damage;
             _baseHealth = Mathf.Max(0, _baseHealth);
             UpdateUI();
+            PlayTextPunch(_baseHealthText, ref _basePunchRoutine, Color.red);
 
             if (_baseHealth <= 0)
             {
@@ -207,6 +220,55 @@ namespace UkraineVsZombies
 
             if (_baseHealthSlider != null)
                 _baseHealthSlider.value = _baseMaxHealth > 0 ? (float)_baseHealth / _baseMaxHealth : 0f;
+        }
+
+        private void PlayTextPunch(TextMeshProUGUI text, ref Coroutine routine, Color flashColor)
+        {
+            if (text == null) return;
+
+            if (routine != null)
+                StopCoroutine(routine);
+
+            routine = StartCoroutine(PlayTextPunchAnimation(text, flashColor));
+        }
+
+        private IEnumerator PlayTextPunchAnimation(TextMeshProUGUI text, Color flashColor)
+        {
+            Transform textTransform = text.transform;
+            Vector3 startScale = Vector3.one;
+            Color startColor = text.color;
+            float timer = 0f;
+
+            while (timer < _uiPunchTime)
+            {
+                timer += Time.deltaTime;
+                float t = timer / _uiPunchTime;
+                float scale = Mathf.Lerp(_uiPunchScale, 1f, t);
+                textTransform.localScale = startScale * scale;
+                text.color = Color.Lerp(flashColor, startColor, t);
+                yield return null;
+            }
+
+            textTransform.localScale = startScale;
+            text.color = startColor;
+        }
+
+        private IEnumerator PlayGameOverAnimation()
+        {
+            Transform panelTransform = _gameOverPanel.transform;
+            Vector3 targetScale = Vector3.one;
+            panelTransform.localScale = Vector3.zero;
+
+            float timer = 0f;
+            while (timer < _gameOverPopTime)
+            {
+                timer += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, timer / _gameOverPopTime);
+                panelTransform.localScale = Vector3.Lerp(Vector3.zero, targetScale, t);
+                yield return null;
+            }
+
+            panelTransform.localScale = targetScale;
         }
     }
 }
