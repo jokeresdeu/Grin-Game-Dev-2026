@@ -26,16 +26,13 @@ namespace Projects.MegaSuperChallengeShot.Scripts
                 _quitButton.onClick.AddListener(OnQuitClicked);
         }
 
-        private void OnEnable()
+        private void Start()
         {
             if (GameManager.Instance != null)
+            {
                 GameManager.Instance.StateChanged += OnStateChanged;
-        }
-
-        private void OnDisable()
-        {
-            if (GameManager.Instance != null)
-                GameManager.Instance.StateChanged -= OnStateChanged;
+                OnStateChanged(GameManager.Instance.State);
+            }
         }
 
         private void Update()
@@ -48,6 +45,13 @@ namespace Projects.MegaSuperChallengeShot.Scripts
 
             if (Input.GetKeyDown(_toggleKey))
                 GameManager.Instance.TogglePause();
+
+            if (_panel != null)
+            {
+                bool shouldShow = GameManager.Instance.State == GameState.Paused;
+                if (_panel.activeSelf != shouldShow)
+                    _panel.SetActive(shouldShow);
+            }
         }
 
         private void OnStateChanged(GameState state)
@@ -76,6 +80,9 @@ namespace Projects.MegaSuperChallengeShot.Scripts
 
         private void OnDestroy()
         {
+            if (GameManager.Instance != null)
+                GameManager.Instance.StateChanged -= OnStateChanged;
+
             if (_resumeButton != null)
                 _resumeButton.onClick.RemoveListener(OnResumeClicked);
 
