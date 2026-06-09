@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3764797864375393173}
   - component: {fileID: 3053509776307437428}
   - component: {fileID: -7894150377329691060}
+  - component: {fileID: 4542878998396786897}
   m_Layer: 8
   m_Name: Bird1_3_0
   m_TagString: Untagged
@@ -210,3 +211,25 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 11.54, y: 9.74}
   m_Direction: 0
+--- !u!95 &4542878998396786897
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7276197088891467599}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a339f946114d01540aaa44d216a1060e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

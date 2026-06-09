@@ -20,83 +20,32 @@ git checkout -b labs/GD-4-domin-adding_animation_to_chicken_hunt
 
 | # | GameObject | Type of animation | Controller |
 |---|------------|-------------------|------------|
-| 1 | Bird (`Bird1_3_0` prefab) | Movement (idle flap) + Damage + Death | `BirdAnimator.controller` |
-| 2 | Crosshair | State change (Shoot pulse, Reload spin) | `CrosshairAnimator.controller` |
-| 3 | Player Coop (the house/coop sprite) | Damage shake + Death state | `PlayerCoopAnimator.controller` |
-| 4 | Score Popup | Pop + fade-up | `ScorePopupAnimator.controller` |
-| 5 | Game Over Panel | Fade-in + scale-in | `GameOverPanelAnimator.controller` |
+| 1 | Bird (`Bird1_3_0` prefab) | Idle flap (movement) | `Bird1_3_0.controller` (already in asset pack — re-use) |
+| 2 | Crosshair | State change (Shoot pulse, Reload spin) | `CrosshairAnimator.controller` (create) |
+| 3 | Player Coop (the house/coop sprite) | Damage + Death + Idle breathing | `PlayerCoopAnimator.controller` (create) |
+| 4 | Score Popup | Pop + fade-up | `ScorePopupAnimator.controller` (create) |
+| 5 | Game Over Panel | Fade-in + scale-in | `GameOverPanelAnimator.controller` (create) |
 | 6 | Title / Banner (bonus) | Idle bob | code-only (`IdleBobAnimator.cs`) |
 
 All Animators are driven from code via `Animator.SetTrigger`/`SetFloat`/`SetBool`. The C# side is already done — you only need the Animator Controllers and Animation Clips.
 
 ---
 
-## 1. Bird animations (Bird1_3_0 prefab)
+## 1. Bird animations (Bird1_3_0 prefab) — re-use existing
 
-**Goal:** wings flap in idle, sprite flashes red on hit (already in code), bird scales-down + fades on death.
+**Goal:** wings flap continuously while the bird flies. The asset pack already provides this — we only need to wire it onto the prefab.
 
-### 1.1 Create the Animation Clips
+### Steps
 
-1. Open `Assets/Projects/MegaSuperChallengeShot/Prefabs/Bird1_3_0.prefab` in **Prefab Mode** (double-click).
-2. Open the **Animation** window: `Window → Animation → Animation` (shortcut `Ctrl/Cmd+6`).
-3. With the bird root selected, the Animation window will say *"To begin animating … create an Animator and an Animation Clip"*. Click **Create**.
-4. Save the new clip in `Assets/Projects/MegaSuperChallengeShot/Animations/Bird/` (create the folder). Name it `Bird_Idle.anim`.
-5. Unity automatically created a `BirdAnimator.controller` next to the clip — drag it into the same `Animations/Bird/` folder and rename to `BirdAnimator.controller` if needed.
+1. Open `Assets/Projects/MegaSuperChallengeShot/Prefabs/Bird1_3_0.prefab` in Prefab Mode.
+2. Select the root → **Add Component → Animator**.
+3. In the Animator component's `Controller` field, drag in:
+   `Assets/Projects/MegaSuperChallengeShot/Graphics/Cute_Birds(4 in 1)Mini/B1/Animations/Bird1_3_0.controller`
+4. Save the prefab (`Ctrl/Cmd+S`).
 
-Now create three clips:
+That's it. The existing controller has a single state that loops `Bird1_3.anim` (the wing-flap sprite-swap), so every spawned bird flaps its wings forever — which satisfies the "movement animation" requirement.
 
-#### Bird_Idle (loop, sprite-frame swap)
-- In the Animation window, click **Add Property → SpriteRenderer → Sprite**.
-- Drag the bird's sprite atlas slices from `Graphics/Cute_Birds(4 in 1)Mini/B1/Sprites/Bird1_3.png` (use the imported slices — if not sliced, see *Sprite import* below).
-- Keep the default 6–8 frames at sample rate 12. Tick **Loop Time** in the clip's inspector.
-
-#### Bird_Hit (one-shot, 0.15s)
-- Duplicate `Bird_Idle.anim` → rename `Bird_Hit.anim`.
-- Trim to 3–4 frames, set sample rate ~20. Untick **Loop Time**.
-- Add a *scale* keyframe: at 0s scale = (1,1,1); at 0.05s scale = (1.2,0.8,1); at 0.15s scale = (1,1,1).
-
-#### Bird_Death (one-shot, 0.6s)
-- Create a new clip `Bird_Death.anim`. Untick **Loop Time**.
-- Add Property → Transform → Scale: 0s → (1,1,1); 0.6s → (0,0,1).
-- Add Property → Transform → Rotation: 0s → 0°; 0.6s → 360°.
-- Add Property → SpriteRenderer → Color.a: 0s → 1; 0.6s → 0.
-
-### 1.2 Wire the BirdAnimator Controller
-
-Open `BirdAnimator.controller` in the Animator window (`Window → Animation → Animator`).
-
-**Parameters tab (left panel) — add these exact names:**
-- `FlySpeed` — Float
-- `Hit` — Trigger
-- `Die` — Trigger
-- `IsDead` — Bool
-
-**States** (right-click in graph → Create State → Empty):
-- `Idle` (Default — right-click → Set as Layer Default State). Motion: `Bird_Idle.anim`.
-- `Hit`. Motion: `Bird_Hit.anim`.
-- `Death`. Motion: `Bird_Death.anim`.
-
-**Transitions** (right-click state → Make Transition):
-
-| From | To | Condition | Has Exit Time | Transition Duration |
-|------|----|-----------|---------------|---------------------|
-| Idle | Hit | Trigger `Hit` | ❌ | 0.05 |
-| Hit | Idle | — (exit time = 1) | ✅ | 0.05 |
-| Any State | Death | Trigger `Die` AND Bool `IsDead == true` | ❌ | 0 |
-
-### 1.3 Attach `BirdAnimationController` to the prefab
-
-1. Open the Bird prefab in Prefab Mode.
-2. Select the root → **Add Component → Bird Animation Controller**.
-3. The script fields:
-   - `Death Delay`: 0.6
-   - `Hit Flash Duration`: 0.15
-   - `Sprite Renderer`: drag the child SpriteRenderer (or leave empty — the script auto-finds it).
-   - `Hit Color`: leave default red-tint.
-4. Confirm the prefab root already has an `Animator` component referencing `BirdAnimator.controller`.
-5. Save the prefab (`Ctrl/Cmd+S`).
-
-> **Note on the existing controllers in `Graphics/Cute_Birds(4 in 1)Mini/B1/Animations/`**: those are demo controllers from the asset pack. You can either copy `Bird1_3_0.controller` into your own folder and adapt it, or build the controller from scratch as above — the new path is cleaner for the lab submission.
+> **No new files, no new clips, no parameters to set.** The bird's death is handled by `Destroy(gameObject)` in `CrosshairController.KillBird` exactly like Lab 3. Damage/Death animations live on the Player Coop instead (see § 3).
 
 ---
 
@@ -286,7 +235,7 @@ This needs **no** Animation Clip and **no** Animator Controller — it's a pure-
 
 Open `Assets/Projects/MegaSuperChallengeShot/Scenes/Main.unity` and verify:
 
-- [ ] Bird prefab has `Animator` (BirdAnimator) + `BirdAnimationController` + `BirdMover` (existing).
+- [ ] Bird prefab has `Animator` (Controller = `Bird1_3_0.controller` from the asset pack) + `BirdMover` (existing).
 - [ ] Crosshair has `Animator` (CrosshairAnimator) + `CrosshairAnimator` script + `CrosshairController` (existing).
 - [ ] `CrosshairController._animator` field points to the new `CrosshairAnimator` component.
 - [ ] PlayerCoop has `Animator` (PlayerCoopAnimator) + `PlayerCoopAnimator` script.
@@ -301,8 +250,8 @@ Open `Assets/Projects/MegaSuperChallengeShot/Scenes/Main.unity` and verify:
 ## 8. Test plan (Play mode)
 
 1. **Idle frame** — Birds flap their wings, title gently bobs, coop breathes.
-2. **Movement** — Birds fly across the screen (already worked in Lab 3); the Animator's `FlySpeed` parameter is updated by `BirdAnimationController.Update`.
-3. **Hit** — Left-click a bird: red flash + `Bird_Hit` clip plays, then bird dies (scales to 0, rotates, fades).
+2. **Movement** — Birds fly across the screen (Lab 3 `BirdMover` translation) and their wings flap continuously (`Bird1_3.anim` loop).
+3. **Hit** — Left-click a bird: bird is destroyed instantly (Lab 3 behaviour); `+10` score popup spawns at the kill location.
 4. **Shotgun** — Right-click: crosshair pulse, every bird in radius dies.
 5. **Reload** — Press `R`: crosshair spins, shots reset to 10/10.
 6. **Damage** — Let a bird reach the right edge: coop flashes red, shakes via code, HP decreases.
@@ -311,18 +260,7 @@ Open `Assets/Projects/MegaSuperChallengeShot/Scenes/Main.unity` and verify:
 
 ---
 
-## 9. Sprite import (if needed)
-
-If `Bird1_3.png` shows up as a single sprite (not sliced):
-
-1. Select the PNG.
-2. In Inspector: `Sprite Mode = Multiple`, click `Sprite Editor`.
-3. In Sprite Editor → top-left `Slice` → Type = Grid By Cell Size (try 64×64 or 128×128 based on the atlas) → Slice → Apply.
-4. The PNG now expands in the Project view to show child sprites — drag those into the Animation window to make the frame-swap clip.
-
----
-
-## 10. Bonus tasks
+## 9. Bonus tasks
 
 ### Бонус 1 — Spine animation (+5)
 1. Window → Package Manager → "+" → Add package from git URL: `https://github.com/EsotericSoftware/spine-unity.git`.
@@ -339,7 +277,7 @@ If `Bird1_3.png` shows up as a single sprite (not sliced):
 
 ---
 
-## 11. Commit + push
+## 10. Commit + push
 
 ```bash
 git status                          # confirm new files
@@ -348,18 +286,18 @@ git commit -m "GD-4: Add animations to Chicken Hunt"
 git push -u origin labs/GD-4-domin-adding_animation_to_chicken_hunt
 ```
 
-## 12. What's in the lab report
+## 11. What's in the lab report
 
 - Branch URL.
 - Screenshot of the Animator graph for the Bird (showing Idle/Hit/Death + transitions).
-- Screenshot of two clips in the Animation window timeline (Bird_Death + GameOver_FadeIn).
+- Screenshot of two clips in the Animation window timeline (e.g. `PlayerCoop_Damage` + `GameOver_FadeIn`).
 - 3–5 lines on each animated object: what state changes drive it, what parameter the code sets.
 - A short table mapping the 5 required animation categories → which clips fulfill each:
 
 | Required category | Implementation |
 |-------------------|----------------|
-| Movement | `Bird_Idle` (wing flap) + `BirdMover` translation |
-| Damage/Death | `Bird_Hit`, `Bird_Death`, `PlayerCoop_Damage`, `PlayerCoop_Death` |
+| Movement | `Bird1_3.anim` (wing flap loop from asset pack) + `BirdMover` translation |
+| Damage/Death | `PlayerCoop_Damage`, `PlayerCoop_Death` |
 | State change | `Crosshair_Shoot`/`Crosshair_Reload`, `GameOver_FadeIn` |
-| Idle | `Bird_Idle`, `Crosshair_Idle`, `PlayerCoop_Idle`, `IdleBobAnimator` |
+| Idle | `Bird1_3.anim` (flap), `Crosshair_Idle`, `PlayerCoop_Idle`, `IdleBobAnimator` |
 | Other | `ScorePopup_Pop` floating text |

@@ -86,11 +86,7 @@ public class CrosshairController : MonoBehaviour
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(bird.transform.position);
 
-        BirdAnimationController birdAnim = bird.GetComponent<BirdAnimationController>();
-        if (birdAnim != null)
-            birdAnim.PlayDeathAndDestroy();
-        else
-            Destroy(bird);
+        Destroy(bird);
     }
 
     private void Reload()
