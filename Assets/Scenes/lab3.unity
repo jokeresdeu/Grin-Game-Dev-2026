@@ -720,6 +720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projects.MegaSuperChallengeShot.Scripts.GameManager
   _gameOverUI: {fileID: 1284758132}
+  _mainMenuSceneName: MainMenu
 --- !u!4 &875326856
 Transform:
   m_ObjectHideFlags: 0
@@ -2014,7 +2015,7 @@ MonoBehaviour:
   _maxHp: 5
   _hpSlider: {fileID: 387449638}
   _hpText: {fileID: 1748999931}
-  _coopAnimator: {fileID: 0}
+  _coopAnimator: {fileID: 1969883894}
 --- !u!4 &1826216922
 Transform:
   m_ObjectHideFlags: 0
@@ -2204,6 +2205,7 @@ GameObject:
   - component: {fileID: 1969883893}
   - component: {fileID: 1969883892}
   - component: {fileID: 1969883891}
+  - component: {fileID: 1969883894}
   m_Layer: 0
   m_Name: PlayerCoop
   m_TagString: Untagged
@@ -2260,15 +2262,15 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 746557868412248318, guid: fd073ac8e63c1f5499db46a912e95e3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 11.54, y: 9.74}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!95 &1969883892
 Animator:
@@ -2301,12 +2303,26 @@ Transform:
   m_GameObject: {fileID: 1969883890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1284.1135, y: 426.81378, z: 0}
+  m_LocalPosition: {x: 0, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1969883894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969883890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20581aae2595141c58a25c810f9cc956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Projects.MegaSuperChallengeShot.Scripts.PlayerCoopAnimator
+  _shakeDuration: 0.25
+  _shakeAmplitude: 0.12
 --- !u!1 &2081354723
 GameObject:
   m_ObjectHideFlags: 0
