@@ -1,23 +1,24 @@
-using System;
 using UnityEngine;
 
 public class BirdMover : MonoBehaviour
 {
-    [SerializeField] private float _speed;
-    
-    void Start()
+    [SerializeField] private float _speed = 2f;
+    [SerializeField] private Vector2 _direction = Vector2.right;
+
+    private bool _isMoving = true;
+
+    public float CurrentSpeed => _isMoving ? _speed : 0f;
+
+    private void Update()
     {
-        Debug.Log("Hello world");
+        if (!_isMoving)
+            return;
+
+        transform.position += (Vector3)(_direction.normalized * (_speed * Time.deltaTime));
     }
 
-    // Update is called once per frame
-    void Update() 
+    public void StopMoving()
     {
-        transform.position += Vector3.right * _speed;
-    }
-
-    private void FixedUpdate()
-    {
-        
+        _isMoving = false;
     }
 }
