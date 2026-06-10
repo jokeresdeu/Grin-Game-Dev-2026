@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Projects/MegaSuperChallengeShot/Scenes/MainMenu.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/lab4.unity
-    guid: fa0f55e2d39d644219cdf96d3807ac91
+    path: Assets/Projects/CubeHopper/Scenes/CubeHopper_Game.unity
+    guid: 76629b324e90e46e4a67c4231018b39c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
