@@ -43,4 +43,16 @@ public class GameOver : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    public void ToMainMenu()
+    {
+        StartCoroutine(LoadMainMenuWithDelay());
+    }
+
+    private IEnumerator LoadMainMenuWithDelay()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+    }
 }

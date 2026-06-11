@@ -474,9 +474,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb6868f81d847848b5ce4c294984e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  isBomb: 0
   wholeTarget: {fileID: 1461181387926668577}
   slicedTarget: {fileID: 1457386799399638496}
   sliceSound: {fileID: 8300000, guid: b8241f39c4068ff47a749ec1a25fe98c, type: 3}
+  sfxMixerGroup: {fileID: 6350048873386230588, guid: 29c5949549c16cb449542e49392b4ad2, type: 2}
 --- !u!114 &6341080459768471852
 MonoBehaviour:
   m_ObjectHideFlags: 0
