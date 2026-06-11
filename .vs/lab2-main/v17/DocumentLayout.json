@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Fruit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Fruit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitHalf.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\FruitHalf.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\MainMenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\MainMenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitSpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\FruitSpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Blade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Blade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FruitHalf.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitHalf.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FruitHalf.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitHalf.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FruitHalf.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T20:02:07.295Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainMenu.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\MainMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MainMenu.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\MainMenu.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MainMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T19:31:41.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameManager.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameManager.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAwFgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T19:31:39.189Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FruitSpawner.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FruitSpawner.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\FruitSpawner.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FruitSpawner.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAwGEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T19:31:36.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Blade.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Blade.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Blade.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Blade.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Blade.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAAwGsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T19:31:33.908Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Fruit.cs",
+              "DocumentMoniker": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Fruit.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Fruit.cs",
+              "ToolTip": "C:\\Users\\\u0425\u043B\u043E\u043F\u0446\u0456\\Desktop\\lab2-main\\Assets\\Scripts\\Fruit.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Fruit.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAwGoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T19:31:26.01Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
