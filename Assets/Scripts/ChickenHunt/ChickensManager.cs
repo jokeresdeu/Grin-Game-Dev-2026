@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI; 
+using UnityEngine.SceneManagement; 
 
 namespace ChickenHunt
 {
@@ -20,6 +22,14 @@ namespace ChickenHunt
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _scoreText;
 
+        [Header("Налаштування Лабораторної")]
+        [SerializeField] private Slider _hpSlider;         
+        [SerializeField] private GameObject _gameOverPanel; 
+        [SerializeField] private int _maxHealth = 100;      
+        
+        private int _currentHealth;
+        private bool _isGameOver = false;
+
         private readonly List<Chicken> _activeChickens = new();
         private float _spawnTimer;
         private int _score;
@@ -27,15 +37,70 @@ namespace ChickenHunt
 
         private void Start()
         {
+            _currentHealth = _maxHealth;
+            if (_hpSlider != null)
+            {
+                _hpSlider.maxValue = _maxHealth;
+                _hpSlider.value = _currentHealth;
+            }
+            if (_gameOverPanel != null) _gameOverPanel.SetActive(false);
+
             StartSpawning();
         }
 
         private void Update()
         {
+            if (_isGameOver) return; 
             if (!_isSpawning) return;
 
             UpdateSpawning();
             CheckOutOfBounds();
+        }
+
+        // Отримання шкоди від курчат
+        public void TakeDamage(int damage)
+        {
+            if (_isGameOver) return;
+
+            _currentHealth -= damage;
+            _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+
+            if (_hpSlider != null) _hpSlider.value = _currentHealth;
+
+            if (_currentHealth <= 0) 
+            {
+                GameOver();
+            }
+        }
+
+        // Додавання балів (для Скрині або лову)
+        public void AddScore(int points)
+        {
+            if (_isGameOver) return;
+            _score += points;
+            UpdateScoreUI();
+        }
+
+        // Кінець гри (ВИПРАВЛЕНО ПОРЯДОК УВІМКНЕННЯ UI)
+        private void GameOver()
+        {
+            _isGameOver = true;
+            StopSpawning();
+            
+            // Спочатку робимо панель колірною та видимою
+            if (_gameOverPanel != null) 
+            {
+                _gameOverPanel.SetActive(true);
+            }
+            
+            // Тільки потім повністю зупиняємо ігровий час
+            Time.timeScale = 0f; 
+        }
+
+        public void RestartGame()
+        {
+            Time.timeScale = 1f; 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void UpdateSpawning()

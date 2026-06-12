@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -16,6 +17,12 @@ namespace ChickenHunt
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _ammoText;
         [SerializeField] private GameObject _reloadingIndicator;
+
+        [Header("Налаштування Фізики")]
+        [SerializeField] private float _catchRadius = 2.5f; 
+        [SerializeField] private LayerMask _enemyLayer;     
+        [SerializeField] private float _rayDistance = 4.0f; 
+        [SerializeField] private LayerMask _groundLayer;    
 
         private Camera _camera;
         private int _currentAmmo;
@@ -48,6 +55,7 @@ namespace ChickenHunt
             UpdateCrosshair();
             HandleInput();
             UpdateReload();
+            CheckWithRaycast();
         }
 
         private void UpdateCrosshair()
@@ -71,6 +79,45 @@ namespace ChickenHunt
             {
                 TryReload();
             }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                CatchWithOverlap();
+            }
+        }
+
+        // Механіка OverlapCircle
+        private void CatchWithOverlap()
+        {
+            Vector3 center = _crosshair != null ? _crosshair.position : transform.position;
+            Collider2D[] caught = Physics2D.OverlapCircleAll(center, _catchRadius, _enemyLayer);
+
+            foreach (Collider2D col in caught)
+            {
+                if (col.TryGetComponent(out Chicken chicken))
+                {
+                    chicken.OnShoot();
+                }
+            }
+        }
+
+        // Механіка Raycast
+        private void CheckWithRaycast()
+        {
+            Vector3 origin = _crosshair != null ? _crosshair.position : transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, _rayDistance, _groundLayer);
+            
+            Color rayColor = hit.collider != null ? Color.green : Color.red;
+            Debug.DrawRay(origin, Vector2.down * _rayDistance, rayColor);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (_crosshair != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(_crosshair.position, _catchRadius);
+            }
         }
 
         private void UpdateReload()
@@ -78,10 +125,7 @@ namespace ChickenHunt
             if (!_isReloading) return;
 
             _reloadTimer -= Time.deltaTime;
-            if (_reloadTimer <= 0f)
-            {
-                FinishReload();
-            }
+            if (_reloadTimer <= 0f) FinishReload();
         }
 
         private void TryShoot()
@@ -101,16 +145,12 @@ namespace ChickenHunt
                 target.OnShoot();
             }
 
-            if (_currentAmmo <= 0)
-            {
-                StartReload();
-            }
+            if (_currentAmmo <= 0) StartReload();
         }
         
         private void TryReload()
         {
             if (_isReloading || _currentAmmo == _maxAmmo) return;
-
             StartReload();
         }
 
@@ -118,9 +158,7 @@ namespace ChickenHunt
         {
             _isReloading = true;
             _reloadTimer = _reloadTime;
-            
-            if (_reloadingIndicator != null)
-                _reloadingIndicator.SetActive(true);
+            if (_reloadingIndicator != null) _reloadingIndicator.SetActive(true);
         }
 
         private void FinishReload()
@@ -128,15 +166,12 @@ namespace ChickenHunt
             _isReloading = false;
             _currentAmmo = _maxAmmo;
             UpdateAmmoUI();
-            
-            if (_reloadingIndicator != null)
-                _reloadingIndicator.SetActive(false);
+            if (_reloadingIndicator != null) _reloadingIndicator.SetActive(false);
         }
 
         private void UpdateAmmoUI()
         {
-            if (_ammoText != null)
-                _ammoText.text = $"{_currentAmmo}/{_maxAmmo}";
+            if (_ammoText != null) _ammoText.text = $"{_currentAmmo}/{_maxAmmo}";
         }
     }
 }
