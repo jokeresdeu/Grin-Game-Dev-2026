@@ -24,6 +24,11 @@ namespace ChickenHunt
         [SerializeField] private float _rayDistance = 4.0f; 
         [SerializeField] private LayerMask _groundLayer;    
 
+        [Header("Animators для 4 лаби")]
+        [SerializeField] private Animator _crosshairAnimator;  
+        [SerializeField] private Animator _pointsAnimator;     
+        [SerializeField] private Animator _losePanelAnimator;  
+
         private Camera _camera;
         private int _currentAmmo;
         private float _reloadTimer;
@@ -38,6 +43,11 @@ namespace ChickenHunt
 
         private void Start()
         {
+            if (_crosshairAnimator == null && _crosshair != null)
+            {
+                _crosshairAnimator = _crosshair.GetComponent<Animator>();
+            }
+
             UpdateAmmoUI();
             if (_reloadingIndicator != null)
                 _reloadingIndicator.SetActive(false);
@@ -86,22 +96,28 @@ namespace ChickenHunt
             }
         }
 
-        // Механіка OverlapCircle
         private void CatchWithOverlap()
         {
             Vector3 center = _crosshair != null ? _crosshair.position : transform.position;
             Collider2D[] caught = Physics2D.OverlapCircleAll(center, _catchRadius, _enemyLayer);
+
+            bool hitAnyChicken = false;
 
             foreach (Collider2D col in caught)
             {
                 if (col.TryGetComponent(out Chicken chicken))
                 {
                     chicken.OnShoot();
+                    hitAnyChicken = true;
                 }
+            }
+
+            if (hitAnyChicken && _pointsAnimator != null)
+            {
+                _pointsAnimator.SetTrigger("Pop");
             }
         }
 
-        // Механіка Raycast
         private void CheckWithRaycast()
         {
             Vector3 origin = _crosshair != null ? _crosshair.position : transform.position;
@@ -135,6 +151,11 @@ namespace ChickenHunt
             _currentAmmo--;
             UpdateAmmoUI();
 
+            if (_crosshairAnimator != null)
+            {
+                _crosshairAnimator.SetTrigger("Shoot");
+            }
+
             Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorld.z = 0f;
 
@@ -143,6 +164,11 @@ namespace ChickenHunt
             if (hit.collider != null && hit.collider.TryGetComponent(out IShootable target))
             {
                 target.OnShoot();
+
+                if (hit.collider.GetComponent<Chicken>() != null && _pointsAnimator != null)
+                {
+                    _pointsAnimator.SetTrigger("Pop");
+                }
             }
 
             if (_currentAmmo <= 0) StartReload();
@@ -172,6 +198,14 @@ namespace ChickenHunt
         private void UpdateAmmoUI()
         {
             if (_ammoText != null) _ammoText.text = $"{_currentAmmo}/{_maxAmmo}";
+        }
+
+        public void TriggerGameOver()
+        {
+            if (_losePanelAnimator != null)
+            {
+                _losePanelAnimator.SetTrigger("Show");
+            }
         }
     }
 }

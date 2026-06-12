@@ -8,25 +8,61 @@ namespace ChickenHunt
         [Header("Налаштування бонусу")]
         [SerializeField] private int _pointsReward = 50; 
 
-        public void OnShoot()
+        private Animator _animator;
+        private bool _isOpen = false;
+
+        private void Start()
         {
-            Debug.LogError("You shot chest");
-            Destroy(gameObject);
+            _animator = GetComponent<Animator>();
         }
 
-        // Взаємодія через Тригер
+        public void OnShoot()
+        {
+            if (_isOpen) return;
+            _isOpen = true;
+
+            Debug.Log("You opened the chest!");
+
+            ChickensManager manager = FindObjectOfType<ChickensManager>();
+            if (manager != null)
+            {
+                manager.AddScore(_pointsReward);
+            }
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Open");
+            }
+
+            Collider2D col = GetComponent<Collider2D>();
+            if (col != null) col.enabled = false;
+
+            Destroy(gameObject, 1.0f);
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (_isOpen) return;
+
             if (collision.CompareTag("Player"))
             {
-          
+                _isOpen = true;
+                
                 ChickensManager manager = FindObjectOfType<ChickensManager>();
                 if (manager != null)
                 {
                     manager.AddScore(_pointsReward); 
                 }
                 
-                Destroy(gameObject); 
+                if (_animator != null)
+                {
+                    _animator.SetTrigger("Open");
+                }
+
+                Collider2D col = GetComponent<Collider2D>();
+                if (col != null) col.enabled = false;
+
+                Destroy(gameObject, 1.0f); 
             }
         }
     }

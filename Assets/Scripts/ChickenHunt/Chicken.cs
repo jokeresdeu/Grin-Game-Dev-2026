@@ -17,13 +17,21 @@ namespace ChickenHunt
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
         [Header("Налаштування шкоди")]
-        [SerializeField] private int _damageAmount = 20; // Скільки HP зніме курка, коли пролетить крізь приціл
+        [SerializeField] private int _damageAmount = 20; 
 
         private Vector2 _moveDirection;
         private Vector2 _baseDirection;
         private float _speed;
+        
+        private Animator _animator;
+        private bool _isDead = false;
      
         public event Action<int> OnDeath;
+
+        private void Start()
+        {
+            _animator = GetComponent<Animator>();
+        }
 
         public void Initialize(Vector2 flyDirection)
         {
@@ -40,6 +48,7 @@ namespace ChickenHunt
 
         private void Update()
         {
+            if (_isDead) return;
             Fly();
         }
 
@@ -50,17 +59,28 @@ namespace ChickenHunt
 
         public void OnShoot()
         {
+            if (_isDead) return;
+            _isDead = true;
+
             OnDeath?.Invoke(_points);
-            Destroy(gameObject);
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Die");
+            }
+
+            Collider2D col = GetComponent<Collider2D>();
+            if (col != null) col.enabled = false;
+
+            Destroy(gameObject, 0.5f);
         }
 
-        // Взаємодія через Тригер (щоб курка пролітала крізь приціл, не відбиваючись, і наносила шкоду)
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            // Якщо курка перетинає об'єкт із тегом Player (наш приціл)
+            if (_isDead) return;
+
             if (collision.CompareTag("Player"))
             {
-                // Шукаємо менеджер гри та знімаємо здоров'я
                 ChickensManager manager = FindObjectOfType<ChickensManager>();
                 if (manager != null)
                 {
