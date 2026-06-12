@@ -12,12 +12,11 @@ GameObject:
   - component: {fileID: 2804804857498472672}
   - component: {fileID: 4151552011483110337}
   - component: {fileID: 4356136300007421468}
-  - component: {fileID: 4637295571293142105}
   - component: {fileID: 8678713293995190216}
   - component: {fileID: 7749257442518795801}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8395326972048140871}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.23, y: -1.09, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -169,42 +168,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!58 &4637295571293142105
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8395326972048140871}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.05, y: -0.27}
-  m_Radius: 0.52673364
 --- !u!114 &8678713293995190216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,11 +177,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8395326972048140871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c63f6f0fbba714157abff2a0bb3847af, type: 3}
+  m_Script: {fileID: 11500000, guid: 470d65c6baa4e4a7b953db05f10b141a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HorizontalMover
-  speed: 10
-  flipSprite: 1
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
+  _speed: 5
+  _flipSprite: 1
+  _jumpForce: 10
+  _jumpKey: 32
+  _groundCheckRadius: 0.2
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &7749257442518795801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,14 +197,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8395326972048140871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a004aac6e296e46efb4ffe18354796d7, type: 3}
+  m_Script: {fileID: 11500000, guid: de6d38eba2f7f4bfe9aa93c9089aafe6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Collector
-  collectibleTypes: []
-  collectAllTypes: 1
-  onCollect:
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 100
+  currentHealth: 100
+  invincibleOnStart: 0
+  invincibilityDuration: 1
+  onDamage:
     m_PersistentCalls:
       m_Calls: []
-  onValueCollected:
+  onHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
     m_PersistentCalls:
       m_Calls: []
