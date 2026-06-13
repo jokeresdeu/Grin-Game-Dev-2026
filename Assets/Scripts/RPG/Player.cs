@@ -21,20 +21,106 @@ namespace RPG
 
         private Camera _camera;
         private Vector2 _moveInput;
-        private Vector3 _clickDestination;
-        private bool _isMovingToClick;
+        private Animator _animator;
+        private bool _isDead = false;
+
+        [Header("Combat")]
+        [SerializeField] private float _attackRange = 1.5f;
+        [SerializeField] private float _attackDamage = 25f;
+        private float _attackCooldownTimer = 0f;
+
+        [Header("Health")]
+        [SerializeField] private float _maxHealth = 100f;
+        private float _currentHealth;
 
         private void Awake()
         {
             _camera = Camera.main;
+            if (_maxHealth <= 0) _maxHealth = 100f;
+            _currentHealth = _maxHealth;
+            _animator = GetComponentInChildren<Animator>();
+            
+            if (_animator != null && _animator.gameObject.GetComponent<AnimationEventReceiver>() == null)
+            {
+                _animator.gameObject.AddComponent<AnimationEventReceiver>();
+            }
+        }
+
+        private void Start()
+        {
+            if (RPGGameManager.Instance != null)
+                RPGGameManager.Instance.UpdateHealthUI(_currentHealth, _maxHealth);
+                
+            if (_animator != null)
+                _animator.Play("Run");
+        }
+
+        public void TakeDamage(float amount)
+        {
+            if (_isDead) return;
+
+            _currentHealth -= amount;
+            if (_currentHealth < 0) _currentHealth = 0;
+            
+            if (RPGGameManager.Instance != null)
+                RPGGameManager.Instance.UpdateHealthUI(_currentHealth, _maxHealth);
+
+            if (_animator != null && amount > 0 && _currentHealth > 0)
+                _animator.SetTrigger("Hit");
+
+            if (_currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+        
+        private void Die()
+        {
+            Debug.Log("PLAYER DIED!");
+            _isDead = true;
+            if (_animator != null)
+            {
+                _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                _animator.SetInteger("State", 6);
+                _animator.SetBool("DieBack", true);
+                _animator.Play("DeathBack", 1);
+            }
+                
+            if (RPGGameManager.Instance != null)
+                RPGGameManager.Instance.GameOver();
         }
 
         private void Update()
         {
+            if (_isDead) return;
+            if (RPGGameManager.Instance != null && RPGGameManager.Instance.IsGameOver)
+            {
+                if (_animator != null) _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                _moveInput = Vector2.zero;
+                UpdateAnimations();
+                return;
+            }
+            
             HandleKeyboardInput();
             HandleClickInput();
             HandleInteraction();
             UpdateMovement();
+
+            UpdateAnimations();
+        }
+
+        private void UpdateAnimations()
+        {
+            if (_animator == null) return;
+
+            if (_moveInput.sqrMagnitude > 0)
+            {
+                _animator.SetInteger("State", 3);
+            }
+            else
+            {
+                _animator.SetInteger("State", 0);
+            }
         }
 
         private void HandleKeyboardInput()
@@ -43,33 +129,52 @@ namespace RPG
                 Input.GetAxisRaw("Horizontal"),
                 Input.GetAxisRaw("Vertical")
             );
-
-            if (_moveInput.sqrMagnitude > 0)
-                _isMovingToClick = false;
         }
 
         private void HandleClickInput()
         {
-            if (Input.GetMouseButtonDown(0))
+            _attackCooldownTimer -= Time.deltaTime;
+
+            if (Input.GetMouseButtonDown(0) && _attackCooldownTimer <= 0f)
             {
-                Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
-                mouseWorld.z = 0f;
-
-                var hit = Physics2D.Raycast(mouseWorld, Vector2.zero, 0f, _npcLayer);
-                if (hit.collider != null)
-                {
-                    var npc = hit.collider.GetComponent<NPC>();
-                    if (npc != null && npc.IsInRange)
-                    {
-                        npc.Interact();
-                        return;
-                    }
-                }
-
-                _clickDestination = mouseWorld;
-                _isMovingToClick = true;
+                PerformAttack();
             }
         }
+
+        private void PerformAttack()
+        {
+            _attackCooldownTimer = 0.5f;
+            if (_animator != null)
+            {
+                _animator.Play("SlashMelee1H", 0);
+            }
+
+            var hits = Physics2D.OverlapCircleAll(transform.position, _attackRange);
+            foreach (var hit in hits)
+            {
+                Vector3 dirToHit = (hit.transform.position - transform.position).normalized;
+                if (Vector3.Dot(transform.right, dirToHit) < 0f)
+                {
+                    continue;
+                }
+
+                var enemy = hit.GetComponent<RPGEnemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(_attackDamage);
+                }
+
+                var chest = hit.GetComponent<RPGChest>();
+                if (chest != null)
+                {
+                    chest.TakeDamage(_attackDamage);
+                }
+            }
+        }
+
+        public void SetExpression(string id) {}
+
+        public void CustomEvent(string id) {}
 
         private void HandleInteraction()
         {
@@ -107,32 +212,33 @@ namespace RPG
 
             if (_moveInput.sqrMagnitude > 0)
                 movement = _moveInput.normalized;
-            else if (_isMovingToClick)
-                movement = GetClickMovement();
 
             if (movement.sqrMagnitude > 0 && CanMove(movement))
                 Move(movement);
         }
 
-        private Vector2 GetClickMovement()
-        {
-            Vector3 direction = _clickDestination - transform.position;
-
-            if (direction.magnitude <= _stopDistance)
-            {
-                _isMovingToClick = false;
-                return Vector2.zero;
-            }
-
-            return ((Vector2)direction).normalized;
-        }
-
         private void Move(Vector2 direction)
         {
-            transform.position += (Vector3)direction * _moveSpeed * Time.deltaTime;
+            Vector3 newPos = transform.position + (Vector3)direction * _moveSpeed * Time.deltaTime;
+            newPos.y = Mathf.Clamp(newPos.y, -4.5f, -2.5f);
 
-            if (direction.x != 0)
-               transform.Rotate(0, 180, 0);
+            if (_camera != null)
+            {
+                float camHeight = 2f * _camera.orthographicSize;
+                float camWidth = camHeight * _camera.aspect;
+                
+                float minX = _camera.transform.position.x - (camWidth / 2f) + 0.5f;
+                float maxX = _camera.transform.position.x + (camWidth / 2f) - 0.5f;
+                
+                newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
+            }
+
+            transform.position = newPos;
+
+            if (direction.x > 0)
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            else if (direction.x < 0)
+                transform.rotation = Quaternion.Euler(0, 180, 0);
         }
 
         private bool CanMove(Vector2 direction)
@@ -146,15 +252,9 @@ namespace RPG
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, _raycastDistance);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, _interactRange);
-
-            if (_isMovingToClick)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(transform.position, _clickDestination);
-                Gizmos.DrawWireSphere(_clickDestination, 0.2f);
-            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, _attackRange);
         }
     }
 }
+
