@@ -9,30 +9,21 @@ public class ToggleMaps : MonoBehaviour {
     private int currentIndex;
     private int cost = 100;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         currentIndex = 0;
-        /*
+        PlayerPrefsManager.BuyMap(maps[0].name);
         foreach (GameObject map in maps)
         {
-            PlayerPrefsManager.LockMap(map.name);
+            Button btn = map.GetComponent<Button>();
+            if (btn != null)
+            {
+                btn.interactable = PlayerPrefsManager.IsMapBought(map.name);
+            }
         }
-        */
-        PlayerPrefsManager.BuyMap(maps[0].name);
+    }
 
-        foreach(GameObject map in maps)
-        {
-            if(PlayerPrefsManager.IsMapBought(map.name))
-            {
-                map.GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                map.GetComponent<Button>().interactable = false;
-            }
-        }
-	}
-	
     public void ToggleRight()
     {
         maps[currentIndex].gameObject.SetActive(false);

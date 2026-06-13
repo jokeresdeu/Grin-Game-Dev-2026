@@ -12,8 +12,8 @@ public class AdScript : MonoBehaviour, IUnityAdsInitializationListener,
     private static LevelManager levelManager;
 
     private const string _androidGameId = "1580635";
-    private const string _videoAdUnitId = "Interstitial_Android";
-    private const string _rewardedAdUnitId = "Rewarded_Android";
+    private const string _videoAdUnitId = "Video_Android";
+    private const string _rewardedAdUnitId = "RewardedVideo_Android";
 
     void Start()
     {
@@ -40,38 +40,22 @@ public class AdScript : MonoBehaviour, IUnityAdsInitializationListener,
     }
 
     public void OnUnityAdsAdLoaded(string adUnitId) { }
+
     public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
     {
-        Debug.LogError($"Ad failed to load: {adUnitId} - {error} - {message}");
+        Debug.LogWarning($"Ad failed to load: {adUnitId} - {error} - {message}");
     }
 
+    // Спрощений ShowAd без реклами — просто перезапускає рівень
     public static void ShowAd(bool died)
     {
-        if (died && AdScript.numOfDeaths >= 6 || !died)
-        {
-            AdScript.numOfDeaths = 0;
-            PlayerPrefsManager.SetAdDeaths(0);
-            if (!AdScript.isPlaying)
-            {
-                Advertisement.Show("Interstitial_Android",
-                    FindObjectOfType<AdScript>());
-                AdScript.isPlaying = true;
-            }
-        }
-        else if (died && AdScript.numOfDeaths == 3 || !died)
-        {
-            AdScript.numOfDeaths++;
-            PlayerPrefsManager.SetAdDeaths(AdScript.numOfDeaths);
-            AdScript.playRewardVideoButton.SetActive(true);
-            AdScript.skipVideoButton.SetActive(true);
-            Time.timeScale = 0;
-        }
-        else if (died)
+        if (died)
         {
             AdScript.numOfDeaths++;
             PlayerPrefsManager.SetAdDeaths(AdScript.numOfDeaths);
             Time.timeScale = 1;
-            levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
+            if (levelManager != null)
+                levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
         }
     }
 
@@ -87,9 +71,12 @@ public class AdScript : MonoBehaviour, IUnityAdsInitializationListener,
     public void SkipRewardVideo()
     {
         Time.timeScale = 1;
-        playRewardVideoButton.SetActive(false);
-        skipVideoButton.SetActive(false);
-        levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
+        if (playRewardVideoButton != null)
+            playRewardVideoButton.SetActive(false);
+        if (skipVideoButton != null)
+            skipVideoButton.SetActive(false);
+        if (levelManager != null)
+            levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
     }
 
     public void OnUnityAdsShowComplete(string adUnitId,
@@ -106,14 +93,18 @@ public class AdScript : MonoBehaviour, IUnityAdsInitializationListener,
             PlayerPrefsManager.SetNumOfCoins(coins);
         }
 
-        levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
+        if (levelManager != null)
+            levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
         Advertisement.Load(adUnitId, this);
     }
 
     public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
     {
-        Debug.LogError($"Ad show failed: {adUnitId} - {error} - {message}");
+        Debug.LogWarning($"Ad show failed: {adUnitId} - {error} - {message}");
         AdScript.isPlaying = false;
+        Time.timeScale = 1;
+        if (levelManager != null)
+            levelManager.MenuLoadLevel(PlayerPrefsManager.GetMap());
     }
 
     public void OnUnityAdsShowStart(string adUnitId) { }

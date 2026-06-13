@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPrefsManager : MonoBehaviour {
+public class PlayerPrefsManager : MonoBehaviour
+{
 
     private const string SCORE = "Default_Score";
     private const string COINS = "Coins";
@@ -105,7 +106,6 @@ public class PlayerPrefsManager : MonoBehaviour {
             return PlayerPrefs.GetFloat(DESERT_SOUND) == 0.5f;
 
         return false;
-
     }
 
     public static void SetAdDeaths(int num)
@@ -141,10 +141,10 @@ public class PlayerPrefsManager : MonoBehaviour {
             PlayerPrefs.SetInt(BOUGHT_ELF_ONE, 1);
         else if (character == "Elf_2")
             PlayerPrefs.SetInt(BOUGHT_ELF_TWO, 1);
-        else if (character == "Knight")
-            PlayerPrefs.SetInt(BOUGHT_KNIGHT, 1);
         else if (character == "Elf_3")
             PlayerPrefs.SetInt(BOUGHT_ELF_THREE, 1);
+        else if (character == "Knight")
+            PlayerPrefs.SetInt(BOUGHT_KNIGHT, 1);
         else if (character == "Jack")
             PlayerPrefs.SetInt(BOUGHT_JACK, 1);
     }
@@ -197,38 +197,39 @@ public class PlayerPrefsManager : MonoBehaviour {
             PlayerPrefs.SetInt(BOUGHT_DESERT, 0);
     }
 
+    // ← ВИПРАВЛЕНО
     public static string GetPlayer()
     {
-        if(PlayerPrefs.GetString(PLAYER) != null || PlayerPrefs.GetString(PLAYER) != "")
-            return PlayerPrefs.GetString(PLAYER);
-        return "Robot";
+        string player = PlayerPrefs.GetString(PLAYER, "Robot");
+        if (player == "")
+            return "Robot";
+        return player;
     }
 
+    // ← ВИПРАВЛЕНО
     public static string GetMap()
     {
-        if(PlayerPrefs.GetString(MAP) == null)
+        string map = PlayerPrefs.GetString(MAP, "01 Start_Robot");
+        if (map == "")
             return "01 Start_Robot";
-        return PlayerPrefs.GetString(MAP);
+        return map;
     }
 
     public static int GetNumOfCoins()
     {
-        if(PlayerPrefs.GetInt(COINS) == null)
-            return 0;
-        return PlayerPrefs.GetInt(COINS);
+        return PlayerPrefs.GetInt(COINS, 0);
     }
 
     public static int GetScore()
     {
-        if (GetMap() == "01 Start_Robot" && PlayerPrefs.GetInt(SCORE) != null)
-            return PlayerPrefs.GetInt(SCORE);
-        else if (GetMap() == "01 Start_Winter" && PlayerPrefs.GetInt(SCORE_WINTER) != null)
-            return PlayerPrefs.GetInt(SCORE_WINTER);
-        else if (GetMap() == "01 Start_Zombie" && PlayerPrefs.GetInt(SCORE_ZOMBIE) != null)
-            return PlayerPrefs.GetInt(SCORE_ZOMBIE);
-        else if (GetMap() == "01 Start_Desert" && PlayerPrefs.GetInt(SCORE_DESERT) != null)
-            return PlayerPrefs.GetInt(SCORE_DESERT);
-
+        if (GetMap() == "01 Start_Robot")
+            return PlayerPrefs.GetInt(SCORE, 0);
+        else if (GetMap() == "01 Start_Winter")
+            return PlayerPrefs.GetInt(SCORE_WINTER, 0);
+        else if (GetMap() == "01 Start_Zombie")
+            return PlayerPrefs.GetInt(SCORE_ZOMBIE, 0);
+        else if (GetMap() == "01 Start_Desert")
+            return PlayerPrefs.GetInt(SCORE_DESERT, 0);
         return 0;
     }
 
@@ -292,15 +293,14 @@ public class PlayerPrefsManager : MonoBehaviour {
 
     public static string GetCurrentCharacter()
     {
-        if(PlayerPrefs.GetString(CURRENT_CHARACTER) == "" || PlayerPrefs.GetString(CURRENT_CHARACTER) == null)
+        string character = PlayerPrefs.GetString(CURRENT_CHARACTER, "Robot");
+        if (character == "")
             return "Robot";
-        return PlayerPrefs.GetString(CURRENT_CHARACTER);
+        return character;
     }
 
     public static int GetAdDeaths()
     {
-        if(PlayerPrefs.GetInt(AD_DEATHS) != null)
-            return PlayerPrefs.GetInt(AD_DEATHS);
-        return 0;
+        return PlayerPrefs.GetInt(AD_DEATHS, 0);
     }
 }

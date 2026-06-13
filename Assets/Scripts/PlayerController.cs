@@ -10,21 +10,20 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
         animator = GetComponent<Animator>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         this.transform.localRotation = Quaternion.identity;
 
-	    if( (Input.GetKeyDown(KeyCode.UpArrow) && onGround) || (SwipeScript.GetTouch() == 0 && onGround) )
+        if ((Input.GetKeyDown(KeyCode.UpArrow) && onGround) || (SwipeScript.GetTouch() == 0 && onGround))
         {
             GetComponent<ConstantForce2D>().force = new Vector3(0f, 30f, 0f);
-            //animator.SetTrigger("Flip");
             this.transform.localScale = new Vector3(0.9764434f, -0.9764434f, 0.9764434f);
             onGround = false;
             GetComponent<AudioSource>().Play();
-        }	
-
-        if( (Input.GetKeyDown(KeyCode.DownArrow) && onGround) || (SwipeScript.GetTouch() == 1 && onGround) )
+        }
+        if ((Input.GetKeyDown(KeyCode.DownArrow) && onGround) || (SwipeScript.GetTouch() == 1 && onGround))
         {
             GetComponent<ConstantForce2D>().force = new Vector3(0f, -30f, 0f);
             this.transform.localScale = new Vector3(0.9764434f, 0.9764434f, 0.9764434f);
@@ -32,7 +31,8 @@ public class PlayerController : MonoBehaviour {
             GetComponent<AudioSource>().Play();
         }
 
-        if(Input.GetMouseButtonDown(0))
+        // Пробіл або клік миші — перевертає гравця
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             GetComponent<ConstantForce2D>().force = new Vector3(0f, -1 * GetComponent<ConstantForce2D>().force.y, 0f);
             this.transform.localScale = new Vector3(this.transform.localScale.x, -1 * transform.localScale.y, transform.localScale.z);
@@ -40,17 +40,9 @@ public class PlayerController : MonoBehaviour {
             GetComponent<AudioSource>().Play();
         }
 
-        if(this.transform.position.x < 0)
+        if (this.transform.position.x < 0)
         {
             Lose.LoseGame();
-        }
-	}
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.GetComponent<Ground>())
-        {
-            onGround = true;
         }
     }
 }
