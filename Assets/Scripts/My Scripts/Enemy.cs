@@ -80,24 +80,15 @@ public class Enemy : MonoBehaviour
         player_in_area = Physics2D.OverlapCircle(
             player_check.position, attack_radius, Player
         );
-
         if (player_in_area && Time.time >= next_attack_time)
         {
-            // Анімація атаки ворога
             if (anim != null)
                 anim.SetTrigger("Attack1");
 
             var playerScript = player_obj.GetComponent<Player>();
             if (playerScript != null)
-            {
-                playerScript.hp -= attack_damage;
+                playerScript.TakeDamage(attack_damage); // ← просто це
 
-                if (playerScript.hp <= 0)
-                {
-                    playerScript.anim.SetBool("death", true);
-                    StartCoroutine(LoadSceneWithDelay(2f));
-                }
-            }
             next_attack_time = Time.time + attack_cool_down;
         }
     }
