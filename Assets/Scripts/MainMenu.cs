@@ -23,6 +23,6 @@ public class MainMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("MainGame");
     }
 }
