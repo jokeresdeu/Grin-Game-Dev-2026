@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Projects/OrbitGunner/Scenes/OrbitGunner_MainMenu.unity
-    guid: b83ffca425354cb68d7798820e0078a4
+    path: Assets/Projects/TowerDefense/Scenes/TowerDefense_MainMenu.unity
+    guid: 4f29339e7fc6b48ea92fb6ee946d3515
   - enabled: 1
-    path: Assets/Projects/OrbitGunner/Scenes/OrbitGunner_Game.unity
-    guid: e129230acf8d4d5080e00a5f90c39287
+    path: Assets/Projects/TowerDefense/Scenes/TowerDefense_Game.unity
+    guid: 2289001f231f0490fae8506a40cf10e3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
